@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MANGAFLAME - マンガ総合ファンサイト</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --red:#E8001A;
+  --orange:#FF6B00;
+  --black:#0D0D0D;
+  --darkgray:#1A1A1A;
+  --midgray:#2E2E2E;
+  --lightgray:#B0B0B0;
+  --white:#F5F5F5;
+  --fire:#FF4500;
+  --water:#00BFFF;
+  --grass:#39D353;
+  --thunder:#FFD700;
+}
+
+body{
+  background:#0D0D0D;
+  color:var(--white);
+  font-family:'Noto Sans JP',sans-serif;
+  overflow-x:hidden;
+}
+
+/* ===== CANVAS BACKGROUND ===== */
+#fx-canvas{
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  pointer-events:none;
+  z-index:0;
+  opacity:0.35;
+}
+
+/* ===== HEADER ===== */
+header{
+  position:relative;
+  z-index:100;
+  background:#0D0D0D;
+  border-bottom:4px solid var(--red);
+}
+
+.header-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 32px;
+  border-bottom:1px solid #333;
+}
+
+.logo{
+  font-family:'Bangers',cursive;
+  font-size:3rem;
+  letter-spacing:4px;
+  line-height:1;
+  position:relative;
+}
+
+.logo span.fire{color:var(--red);}
+.logo span.glow{
+  color:var(--white);
+  text-shadow:0 0 20px var(--red),0 0 40px var(--orange);
+}
+
+.header-tagline{
+  font-size:0.65rem;
+  letter-spacing:3px;
+  color:var(--lightgray);
+  text-transform:uppercase;
+  margin-top:2px;
+}
+
+.header-issue{
+  text-align:right;
+  font-size:0.72rem;
+  color:var(--lightgray);
+  letter-spacing:1px;
+}
+.header-issue strong{
+  display:block;
+  font-size:1.1rem;
+  color:var(--white);
+  font-family:'Bangers',cursive;
+  letter-spacing:2px;
+}
+
+/* ===== NAV ===== */
+nav{
+  display:flex;
+  align-items:center;
+  padding:0 32px;
+  background:#0D0D0D;
+}
+
+nav a{
+  color:var(--white);
+  text-decoration:none;
+  font-weight:700;
+  font-size:0.82rem;
+  letter-spacing:2px;
+  padding:13px 22px;
+  display:inline-block;
+  border-right:1px solid #333;
+  transition:background 0.15s,color 0.15s;
+  position:relative;
+  text-transform:uppercase;
+}
+nav a:first-child{border-left:1px solid #333;}
+nav a::after{
+  content:'';
+  position:absolute;
+  bottom:0;left:0;right:0;
+  height:3px;
+  background:var(--red);
+  transform:scaleX(0);
+  transition:transform 0.2s;
+}
+nav a:hover{background:#1a1a1a;color:var(--orange);}
+nav a:hover::after{transform:scaleX(1);}
+nav a.active{color:var(--red);}
+nav a.active::after{transform:scaleX(1);}
+
+/* ===== HERO ===== */
+.hero{
+  position:relative;
+  z-index:10;
+  min-height:420px;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  background:linear-gradient(135deg,#0D0D0D 0%,#1a0505 50%,#0D0D0D 100%);
+  border-bottom:3px solid var(--red);
+}
+
+.hero-inner{
+  position:relative;
+  z-index:2;
+  padding:60px 48px;
+  max-width:900px;
+}
+
+.hero-eyebrow{
+  display:inline-block;
+  background:var(--red);
+  color:#fff;
+  font-weight:900;
+  font-size:0.7rem;
+  letter-spacing:4px;
+  padding:4px 14px;
+  margin-bottom:20px;
+  text-transform:uppercase;
+  clip-path:polygon(0 0,100% 0,95% 100%,0 100%);
+}
+
+.hero h1{
+  font-family:'Bangers',cursive;
+  font-size:5rem;
+  letter-spacing:6px;
+  line-height:0.95;
+  margin-bottom:16px;
+}
+
+.hero h1 em{
+  font-style:normal;
+  color:var(--red);
+  display:inline;
+}
+
+.hero-sub{
+  font-size:1rem;
+  color:var(--lightgray);
+  margin-bottom:32px;
+  line-height:1.7;
+  max-width:480px;
+}
+
+.hero-cta-group{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+}
+
+.btn-primary{
+  display:inline-block;
+  background:var(--red);
+  color:#fff;
+  font-weight:900;
+  font-size:0.85rem;
+  letter-spacing:2px;
+  padding:13px 32px;
+  text-decoration:none;
+  text-transform:uppercase;
+  clip-path:polygon(0 0,100% 0,92% 100%,0 100%);
+  transition:background 0.15s;
+}
+.btn-primary:hover{background:var(--orange);}
+
+.btn-secondary{
+  display:inline-block;
+  border:2px solid var(--white);
+  color:var(--white);
+  font-weight:700;
+  font-size:0.85rem;
+  letter-spacing:2px;
+  padding:11px 28px;
+  text-decoration:none;
+  text-transform:uppercase;
+  transition:border-color 0.15s,color 0.15s;
+}
+.btn-secondary:hover{border-color:var(--orange);color:var(--orange);}
+
+/* Hero decoration strip */
+.hero-strip{
+  position:absolute;
+  right:0;top:0;bottom:0;
+  width:260px;
+  background:repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 18px,
+    rgba(232,0,26,0.06) 18px,
+    rgba(232,0,26,0.06) 36px
+  );
+}
+
+/* ===== ABILITY BADGES ===== */
+.ability-bar{
+  position:relative;
+  z-index:10;
+  display:flex;
+  background:#111;
+  border-bottom:2px solid #222;
+  overflow-x:auto;
+}
+
+.ability-badge{
+  flex:1;
+  min-width:120px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px 20px;
+  border-right:1px solid #222;
+  cursor:default;
+}
+
+.ability-badge .icon{
+  width:32px;height:32px;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;
+  flex-shrink:0;
+}
+.fire-badge .icon{background:rgba(255,69,0,0.2);color:var(--fire);}
+.water-badge .icon{background:rgba(0,191,255,0.2);color:var(--water);}
+.grass-badge .icon{background:rgba(57,211,83,0.2);color:var(--grass);}
+.thunder-badge .icon{background:rgba(255,215,0,0.2);color:var(--thunder);}
+
+.ability-badge .label{font-size:0.72rem;color:var(--lightgray);letter-spacing:1px;}
+.ability-badge .value{font-size:1.1rem;font-weight:900;color:var(--white);}
+
+/* ===== MAIN CONTENT ===== */
+main{
+  position:relative;
+  z-index:10;
+  max-width:1100px;
+  margin:0 auto;
+  padding:40px 32px 60px;
+  display:grid;
+  grid-template-columns:1fr 300px;
+  gap:40px;
+}
+
+/* ===== SECTION HEADER ===== */
+.section-header{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:20px;
+}
+.section-header h2{
+  font-family:'Bangers',cursive;
+  font-size:1.6rem;
+  letter-spacing:3px;
+  color:var(--white);
+}
+.section-header .line{
+  flex:1;
+  height:2px;
+  background:linear-gradient(90deg,var(--red),transparent);
+}
+.section-tag{
+  background:var(--red);
+  color:#fff;
+  font-size:0.65rem;
+  font-weight:900;
+  letter-spacing:2px;
+  padding:3px 10px;
+  text-transform:uppercase;
+}
+
+/* ===== NEWS / FEATURED ===== */
+.featured-grid{
+  display:grid;
+  gap:16px;
+}
+
+.card-featured{
+  background:var(--darkgray);
+  border-left:4px solid var(--red);
+  padding:18px 20px;
+  display:flex;
+  gap:16px;
+  cursor:pointer;
+  transition:background 0.15s;
+  text-decoration:none;
+  color:inherit;
+}
+.card-featured:hover{background:#222;}
+
+.card-featured .card-num{
+  font-family:'Bangers',cursive;
+  font-size:2.5rem;
+  color:var(--red);
+  opacity:0.5;
+  line-height:1;
+  min-width:36px;
+}
+
+.card-featured .card-body h3{
+  font-weight:900;
+  font-size:0.95rem;
+  margin-bottom:6px;
+  line-height:1.4;
+}
+.card-featured .card-body p{
+  font-size:0.78rem;
+  color:var(--lightgray);
+  line-height:1.6;
+}
+.card-featured .card-meta{
+  font-size:0.68rem;
+  color:var(--red);
+  letter-spacing:1px;
+  margin-bottom:6px;
+  font-weight:700;
+  text-transform:uppercase;
+}
+
+/* ===== MINI BLOG ===== */
+.blog-list{
+  list-style:none;
+}
+.blog-list li{
+  border-bottom:1px solid #222;
+  padding:10px 0;
+}
+.blog-list li:last-child{border-bottom:none;}
+.blog-entry{
+  display:flex;
+  gap:12px;
+  align-items:baseline;
+  text-decoration:none;
+  color:inherit;
+}
+.blog-entry:hover .blog-title{color:var(--orange);}
+.blog-date{
+  font-size:0.68rem;
+  color:var(--lightgray);
+  white-space:nowrap;
+  min-width:70px;
+  font-family:monospace;
+}
+.blog-title{
+  font-size:0.82rem;
+  font-weight:700;
+  transition:color 0.15s;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar{display:flex;flex-direction:column;gap:28px;}
+
+.sidebar-card{
+  background:var(--darkgray);
+  border-top:3px solid var(--red);
+}
+
+.sidebar-card-header{
+  padding:12px 16px;
+  border-bottom:1px solid #333;
+  font-family:'Bangers',cursive;
+  font-size:1.1rem;
+  letter-spacing:2px;
+  color:var(--white);
+}
+
+.ranking-list{list-style:none;padding:12px 0;}
+.ranking-list li{
+  padding:9px 16px;
+  border-bottom:1px solid #222;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:0.82rem;
+  cursor:pointer;
+  transition:background 0.1s;
+}
+.ranking-list li:hover{background:#222;}
+.ranking-list li:last-child{border-bottom:none;}
+
+.rank-num{
+  font-family:'Bangers',cursive;
+  font-size:1.2rem;
+  min-width:24px;
+  line-height:1;
+}
+.rank-1{color:var(--thunder);}
+.rank-2{color:var(--lightgray);}
+.rank-3{color:var(--orange);}
+.rank-other{color:#555;}
+
+.rank-title{font-weight:700;flex:1;}
+.rank-pts{font-size:0.68rem;color:var(--lightgray);}
+
+/* ability tag in ranking */
+.rank-tag{
+  font-size:0.6rem;
+  padding:2px 6px;
+  border-radius:2px;
+  font-weight:700;
+  letter-spacing:1px;
+}
+.tag-fire{background:rgba(255,69,0,0.2);color:var(--fire);}
+.tag-water{background:rgba(0,191,255,0.2);color:var(--water);}
+.tag-grass{background:rgba(57,211,83,0.2);color:var(--grass);}
+.tag-thunder{background:rgba(255,215,0,0.2);color:var(--thunder);}
+
+/* ===== GENRE GRID ===== */
+.genre-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:2px;
+}
+.genre-item{
+  background:#1e1e1e;
+  padding:14px 10px;
+  text-align:center;
+  cursor:pointer;
+  transition:background 0.15s;
+  text-decoration:none;
+}
+.genre-item:hover{background:#2a2a2a;}
+.genre-icon{font-size:1.4rem;display:block;margin-bottom:6px;}
+.genre-name{font-size:0.7rem;font-weight:700;color:var(--lightgray);letter-spacing:1px;}
+
+/* ===== GALLERY STRIP ===== */
+.gallery-section{
+  position:relative;
+  z-index:10;
+  border-top:2px solid #222;
+  border-bottom:2px solid #222;
+  padding:32px 48px;
+  background:#111;
+}
+.gallery-strip{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:12px;
+  margin-top:20px;
+}
+.gallery-thumb{
+  aspect-ratio:3/4;
+  background:var(--midgray);
+  position:relative;
+  overflow:hidden;
+  cursor:pointer;
+}
+.gallery-thumb:hover .gallery-overlay{opacity:1;}
+.gallery-overlay{
+  position:absolute;inset:0;
+  background:rgba(232,0,26,0.7);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity 0.2s;
+  font-size:0.7rem;font-weight:900;letter-spacing:2px;color:#fff;
+  text-transform:uppercase;
+}
+/* Placeholder pattern */
+.gallery-thumb::before{
+  content:'';
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    45deg,
+    #222 0px,#222 10px,
+    #282828 10px,#282828 20px
+  );
+}
+.gallery-thumb::after{
+  content:attr(data-label);
+  position:absolute;bottom:0;left:0;right:0;
+  background:rgba(0,0,0,0.6);
+  font-size:0.65rem;
+  font-weight:700;
+  padding:6px 8px;
+  color:var(--lightgray);
+}
+
+/* ===== FOOTER ===== */
+footer{
+  position:relative;
+  z-index:10;
+  background:#080808;
+  border-top:3px solid var(--red);
+  padding:32px 48px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:20px;
+}
+.footer-logo{
+  font-family:'Bangers',cursive;
+  font-size:1.8rem;
+  letter-spacing:3px;
+  color:var(--red);
+}
+.footer-links{display:flex;gap:24px;flex-wrap:wrap;}
+.footer-links a{
+  font-size:0.75rem;
+  color:var(--lightgray);
+  text-decoration:none;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+.footer-links a:hover{color:var(--white);}
+.footer-copy{
+  font-size:0.68rem;
+  color:#444;
+  letter-spacing:1px;
+}
+
+/* ===== ABILITY FX DIVIDER ===== */
+.fx-divider{
+  position:relative;
+  z-index:10;
+  height:4px;
+  background:linear-gradient(90deg,var(--fire),var(--water),var(--grass),var(--thunder),var(--fire));
+  background-size:300% 100%;
+  animation:slideGrad 4s linear infinite;
+}
+@keyframes slideGrad{
+  0%{background-position:0% 50%}
+  100%{background-position:300% 50%}
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  main{grid-template-columns:1fr;}
+  .hero h1{font-size:3rem;}
+  .gallery-strip{grid-template-columns:repeat(3,1fr);}
+  .header-top{padding:10px 16px;}
+  nav{padding:0 8px;}
+  nav a{padding:12px 12px;font-size:0.72rem;}
+  .gallery-section{padding:24px 16px;}
+  footer{padding:24px 16px;}
+  .hero-inner{padding:40px 24px;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="fx-canvas"></canvas>
+
+<!-- HEADER -->
+<header>
+  <div class="header-top">
+    <div>
+      <div class="logo">
+        <span class="glow">MANGA</span><span class="fire">FLAME</span>
+      </div>
+      <div class="header-tagline">マンガ総合ファンサイト — The Ultimate Manga Fan Site</div>
+    </div>
+    <div class="header-issue">
+      <strong>WEEKLY UPDATE</strong>
+      毎週更新中
+    </div>
+  </div>
+
+  <nav>
+    <a href="index.html" class="active">HOME</a>
+    <a href="blog.html">BLOG</a>
+    <a href="ranking.html">RANKING</a>
+    <a href="gallery.html">GALLERY</a>
+    <a href="about.html">ABOUT</a>
+  </nav>
+</header>
+
+<!-- ABILITY FX BAR -->
+<div class="fx-divider"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">🔥 Pick Up！</div>
+    <h1>EVERYTHING<br>IS <em>MANGA.</em></h1>
+    <p class="hero-sub">
+      炎・水・草・雷——すべての能力が宿る漫画の世界へようこそ。<br>
+      ランキング・レビュー・ファンアートを毎週更新！
+    </p>
+    <div class="hero-cta-group">
+      <a href="ranking.html" class="btn-primary">ランキングを見る</a>
+      <a href="gallery.html" class="btn-secondary">ギャラリーへ</a>
+    </div>
+  </div>
+  <div class="hero-strip"></div>
+</section>
+
+<!-- ABILITY BAR -->
+<div class="ability-bar">
+  <div class="ability-badge fire-badge">
+    <div class="icon">🔥</div>
+    <div>
+      <div class="label">FIRE / 炎</div>
+      <div class="value">バトル漫画</div>
+    </div>
+  </div>
+  <div class="ability-badge water-badge">
+    <div class="icon">💧</div>
+    <div>
+      <div class="label">WATER / 水</div>
+      <div class="value">青春・恋愛</div>
+    </div>
+  </div>
+  <div class="ability-badge grass-badge">
+    <div class="icon">🌿</div>
+    <div>
+      <div class="label">GRASS / 草</div>
+      <div class="value">日常・ほっこり</div>
+    </div>
+  </div>
+  <div class="ability-badge thunder-badge">
+    <div class="icon">⚡</div>
+    <div>
+      <div class="label">THUNDER / 雷</div>
+      <div class="value">スポーツ・熱血</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main>
+  <!-- LEFT: FEATURED + BLOG -->
+  <div>
+    <div class="section-header">
+      <span class="section-tag">FEATURED</span>
+      <h2>注目記事</h2>
+      <div class="line"></div>
+    </div>
+
+    <div class="featured-grid">
+      <a href="blog.html" class="card-featured">
+        <div class="card-num">01</div>
+        <div class="card-body">
+          <div class="card-meta">🔥 FIRE — バトル</div>
+          <h3>2024年上半期・最も熱かったバトルシーン TOP10</h3>
+          <p>今年前半に掲載された名シーンを独自視点でランキング。あの決戦が1位に輝いた！</p>
+        </div>
+      </a>
+      <a href="blog.html" class="card-featured">
+        <div class="card-num">02</div>
+        <div class="card-body">
+          <div class="card-meta">⚡ THUNDER — スポーツ</div>
+          <h3>スポーツ漫画の名言集——勝利へ導く言葉たち</h3>
+          <p>汗と涙の物語から生まれた珠玉の台詞を一挙紹介。あなたの心に刺さる一言は？</p>
+        </div>
+      </a>
+      <a href="blog.html" class="card-featured">
+        <div class="card-num">03</div>
+        <div class="card-body">
+          <div class="card-meta">💧 WATER — 恋愛</div>
+          <h3>読んで泣ける恋愛漫画 5選——ハンカチ必須</h3>
+          <p>静かに心を揺さぶる恋愛作品を厳選。切なさと温かさが共存する5作品。</p>
+        </div>
+      </a>
+    </div>
+
+    <!-- BLOG MINI -->
+    <div class="section-header" style="margin-top:36px;">
+      <span class="section-tag">BLOG</span>
+      <h2>最新ブログ</h2>
+      <div class="line"></div>
+    </div>
+
+    <ul class="blog-list">
+      <li>
+        <a href="blog.html" class="blog-entry">
+          <span class="blog-date">2024.07.15</span>
+          <span class="blog-title">週刊誌の「引き」の上手さについて考えた</span>
+        </a>
+      </li>
+      <li>
+        <a href="blog.html" class="blog-entry">
+          <span class="blog-date">2024.07.08</span>
+          <span class="blog-title">最近ハマってる漫画3冊を紹介します</span>
+        </a>
+      </li>
+      <li>
+        <a href="blog.html" class="blog-entry">
+          <span class="blog-date">2024.07.01</span>
+          <span class="blog-title">ファンアートを描き始めてわかったこと</span>
+        </a>
+      </li>
+      <li>
+        <a href="blog.html" class="blog-entry">
+          <span class="blog-date">2024.06.24</span>
+          <span class="blog-title">名作漫画の「1話目」の完成度について</span>
+        </a>
+      </li>
+      <li>
+        <a href="blog.html" class="blog-entry">
+          <span class="blog-date">2024.06.17</span>
+          <span class="blog-title">バトル漫画における能力系と武器系の違い</span>
+        </a>
+      </li>
+    </ul>
+
+    <!-- GENRE GRID -->
+    <div class="section-header" style="margin-top:36px;">
+      <span class="section-tag">GENRE</span>
+      <h2>ジャンル別</h2>
+      <div class="line"></div>
+    </div>
+    <div class="genre-grid">
+      <a href="ranking.html" class="genre-item">
+        <span class="genre-icon">⚔️</span>
+        <span class="genre-name">バトル</span>
+      </a>
+      <a href="ranking.html" class="genre-item">
+        <span class="genre-icon">💘</span>
+        <span class="genre-name">恋愛</span>
+      </a>
+      <a href="ranking.html" class="genre-item">
+        <span class="genre-icon">🏆</span>
+        <span class="genre-name">スポーツ</span>
+      </a>
+      <a href="ranking.html" class="genre-item">
+        <span class="genre-icon">😂</span>
+        <span class="genre-name">ギャグ</span>
+      </a>
+      <a href="ranking.html" class="genre-item">
+        <span class="genre-icon">🌌</span>
+        <span class="genre-name">SF</span>
+      </a>
+      <a href="ranking.html" class="genre-item">
+        <span class="genre-icon">🌿</span>
+        <span class="genre-name">日常</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-card">
+      <div class="sidebar-card-header">⚡ WEEKLY RANKING</div>
+      <ol class="ranking-list">
+        <li>
+          <span class="rank-num rank-1">1</span>
+          <span class="rank-title">鬼滅の刃</span>
+          <span class="rank-tag tag-fire">炎</span>
+        </li>
+        <li>
+          <span class="rank-num rank-2">2</span>
+          <span class="rank-title">NARUTO</span>
+          <span class="rank-tag tag-thunder">雷</span>
+        </li>
+        <li>
+          <span class="rank-num rank-3">3</span>
+          <span class="rank-title">ONE PIECE</span>
+          <span class="rank-tag tag-water">水</span>
+        </li>
+        <li>
+          <span class="rank-num rank-other">4</span>
+          <span class="rank-title">ハイキュー！！</span>
+          <span class="rank-tag tag-thunder">雷</span>
+        </li>
+        <li>
+          <span class="rank-num rank-other">5</span>
+          <span class="rank-title">呪術廻戦</span>
+          <span class="rank-tag tag-fire">炎</span>
+        </li>
+        <li>
+          <span class="rank-num rank-other">6</span>
+          <span class="rank-title">進撃の巨人</span>
+          <span class="rank-tag tag-grass">草</span>
+        </li>
+        <li>
+          <span class="rank-num rank-other">7</span>
+          <span class="rank-title">ブルーロック</span>
+          <span class="rank-tag tag-thunder">雷</span>
+        </li>
+        <li>
+          <span class="rank-num rank-other">8</span>
+          <span class="rank-title">チェンソーマン</span>
+          <span class="rank-tag tag-fire">炎</span>
+        </li>
+        <li>
+          <span class="rank-num rank-other">9</span>
+          <span class="rank-title">スラムダンク</span>
+          <span class="rank-tag tag-thunder">雷</span>
+        </li>
+        <li>
+          <span class="rank-num rank-other">10</span>
+          <span class="rank-title">よつばと！</span>
+          <span class="rank-tag tag-grass">草</span>
+        </li>
+      </ol>
+      <div style="padding:10px 16px;border-top:1px solid #333;">
+        <a href="ranking.html" style="font-size:0.72rem;color:var(--red);text-decoration:none;font-weight:700;letter-spacing:1px;">
+          ▶ フルランキングを見る
+        </a>
+      </div>
+    </div>
+
+    <div class="sidebar-card">
+      <div class="sidebar-card-header">🔥 ABILITY TYPE</div>
+      <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:1rem;">🔥</span>
+          <div style="flex:1;height:6px;background:#222;border-radius:3px;overflow:hidden;">
+            <div style="height:100%;width:38%;background:var(--fire);border-radius:3px;"></div>
+          </div>
+          <span style="font-size:0.72rem;color:var(--lightgray);">38%</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:1rem;">⚡</span>
+          <div style="flex:1;height:6px;background:#222;border-radius:3px;overflow:hidden;">
+            <div style="height:100%;width:30%;background:var(--thunder);border-radius:3px;"></div>
+          </div>
+          <span style="font-size:0.72rem;color:var(--lightgray);">30%</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:1rem;">💧</span>
+          <div style="flex:1;height:6px;background:#222;border-radius:3px;overflow:hidden;">
+            <div style="height:100%;width:20%;background:var(--water);border-radius:3px;"></div>
+          </div>
+          <span style="font-size:0.72rem;color:var(--lightgray);">20%</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:1rem;">🌿</span>
+          <div style="flex:1;height:6px;background:#222;border-radius:3px;overflow:hidden;">
+            <div style="height:100%;width:12%;background:var(--grass);border-radius:3px;"></div>
+          </div>
+          <span style="font-size:0.72rem;color:var(--lightgray);">12%</span>
+        </div>
+        <p style="font-size:0.68rem;color:#555;margin-top:6px;">ランキング投票の属性分布</p>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<!-- GALLERY STRIP -->
+<div class="fx-divider"></div>
+<section class="gallery-section">
+  <div class="section-header">
+    <span class="section-tag">GALLERY</span>
+    <h2>最新ファンアート</h2>
+    <div class="line"></div>
+  </div>
+  <div class="gallery-strip">
+    <div class="gallery-thumb" data-label="ファンアート #001">
+      <div class="gallery-overlay">VIEW</div>
+    </div>
+    <div class="gallery-thumb" data-label="ファンアート #002">
+      <div class="gallery-overlay">VIEW</div>
+    </div>
+    <div class="gallery-thumb" data-label="ファンアート #003">
+      <div class="gallery-overlay">VIEW</div>
+    </div>
+    <div class="gallery-thumb" data-label="ファンアート #004">
+      <div class="gallery-overlay">VIEW</div>
+    </div>
+    <div class="gallery-thumb" data-label="ファンアート #005">
+      <div class="gallery-overlay">VIEW</div>
+    </div>
+  </div>
+  <div style="margin-top:20px;text-align:right;">
+    <a href="gallery.html" style="font-size:0.78rem;color:var(--red);text-decoration:none;font-weight:700;letter-spacing:2px;text-transform:uppercase;">▶ ギャラリーをすべて見る</a>
+  </div>
+</section>
+<div class="fx-divider"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">MANGAFLAME</div>
+    <div style="font-size:0.68rem;color:#444;margin-top:4px;letter-spacing:1px;">マンガ総合ファンサイト</div>
+  </div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="blog.html">Blog</a>
+    <a href="ranking.html">Ranking</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="about.html">About</a>
+  </div>
+  <div class="footer-copy">
+    © 2024 MANGAFLAME — 掲載作品の著作権は各作者・出版社に帰属します
+  </div>
+</footer>
+
+<!-- FX CANVAS SCRIPT -->
+<script>
+(function(){
+  const canvas=document.getElementById('fx-canvas');
+  const ctx=canvas.getContext('2d');
+  let W,H,particles=[];
+
+  const TYPES=[
+    {name:'fire',color:'rgba(255,69,0,',symbols:['🔥','◆','▲'],size:[6,14]},
+    {name:'water',color:'rgba(0,191,255,',symbols:['●','○','◎'],size:[4,10]},
+    {name:'grass',color:'rgba(57,211,83,',symbols:['✦','★','◇'],size:[4,10]},
+    {name:'thunder',color:'rgba(255,215,0,',symbols:['⚡','▸','◉'],size:[5,12]},
+  ];
+
+  function resize(){
+    W=canvas.width=window.innerWidth;
+    H=canvas.height=window.innerHeight;
+  }
+
+  function makeParticle(){
+    const t=TYPES[Math.floor(Math.random()*TYPES.length)];
+    const size=t.size[0]+Math.random()*(t.size[1]-t.size[0]);
+    return{
+      x:Math.random()*W,
+      y:H+size,
+      vx:(Math.random()-0.5)*0.6,
+      vy:-(0.3+Math.random()*0.8),
+      size,
+      alpha:0.1+Math.random()*0.5,
+      type:t,
+      rot:Math.random()*Math.PI*2,
+      rotv:(Math.random()-0.5)*0.04,
+      life:0,
+      maxLife:180+Math.random()*300
+    };
+  }
+
+  function init(){
+    resize();
+    for(let i=0;i<60;i++){
+      const p=makeParticle();
+      p.y=Math.random()*H;
+      p.life=Math.random()*p.maxLife;
+      particles.push(p);
+    }
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+
+    // Draw faint grid lines (background texture)
+    ctx.strokeStyle='rgba(232,0,26,0.04)';
+    ctx.lineWidth=0.5;
+    for(let x=0;x<W;x+=60){
+      ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();
+    }
+    for(let y=0;y<H;y+=60){
+      ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();
+    }
+
+    particles.forEach(p=>{
+      const fade=Math.min(p.life/30,1)*Math.min((p.maxLife-p.life)/30,1);
+      ctx.save();
+      ctx.translate(p.x,p.y);
+      ctx.rotate(p.rot);
+      ctx.font=`${p.size}px sans-serif`;
+      ctx.globalAlpha=p.alpha*fade;
+
+      if(p.type.name==='fire'){
+        ctx.fillStyle=p.type.color+'1)';
+        ctx.fillRect(-p.size/4,-p.size/2,p.size/2,p.size);
+      } else if(p.type.name==='thunder'){
+        ctx.strokeStyle=p.type.color+'1)';
+        ctx.lineWidth=1.5;
+        ctx.beginPath();
+        ctx.moveTo(p.size/2,-p.size/2);
+        ctx.lineTo(-p.size/4,0);
+        ctx.lineTo(p.size/4,0);
+        ctx.lineTo(-p.size/2,p.size/2);
+        ctx.stroke();
+      } else if(p.type.name==='water'){
+        ctx.fillStyle=p.type.color+'1)';
+        ctx.beginPath();
+        ctx.arc(0,0,p.size/2,0,Math.PI*2);
+        ctx.fill();
+      } else {
+        // grass: simple plus
+        ctx.strokeStyle=p.type.color+'1)';
+        ctx.lineWidth=1.5;
+        ctx.beginPath();
+        ctx.moveTo(-p.size/2,0);ctx.lineTo(p.size/2,0);
+        ctx.moveTo(0,-p.size/2);ctx.lineTo(0,p.size/2);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      p.x+=p.vx;
+      p.y+=p.vy;
+      p.rot+=p.rotv;
+      p.life++;
+      if(p.life>p.maxLife){
+        Object.assign(p,makeParticle());
+      }
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize',resize);
+  init();
+  draw();
+})();
+</script>
+
+</body>
+</html>
