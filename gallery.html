@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GALLERY — MANGAFLAME</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#E8001A;
+  --orange:#FF6B00;
+  --darkgray:#1A1A1A;
+  --lightgray:#B0B0B0;
+  --white:#F5F5F5;
+  --fire:#FF4500;
+  --water:#00BFFF;
+  --grass:#39D353;
+  --thunder:#FFD700;
+}
+body{
+  background:#0D0D0D;
+  color:var(--white);
+  font-family:'Noto Sans JP',sans-serif;
+  overflow-x:hidden;
+}
+#fx-canvas{
+  position:fixed;top:0;left:0;
+  width:100%;height:100%;
+  pointer-events:none;z-index:0;opacity:0.18;
+}
+
+/* HEADER */
+header{position:relative;z-index:100;background:#0D0D0D;border-bottom:4px solid var(--red);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 32px;border-bottom:1px solid #333;}
+.logo{font-family:'Bangers',cursive;font-size:3rem;letter-spacing:4px;line-height:1;}
+.logo span.fire{color:var(--red);}
+.logo span.glow{color:var(--white);text-shadow:0 0 20px var(--red),0 0 40px var(--orange);}
+.header-tagline{font-size:0.65rem;letter-spacing:3px;color:var(--lightgray);text-transform:uppercase;margin-top:2px;}
+.header-issue{text-align:right;font-size:0.72rem;color:var(--lightgray);letter-spacing:1px;}
+.header-issue strong{display:block;font-size:1.1rem;color:var(--white);font-family:'Bangers',cursive;letter-spacing:2px;}
+nav{display:flex;align-items:center;padding:0 32px;background:#0D0D0D;}
+nav a{color:var(--white);text-decoration:none;font-weight:700;font-size:0.82rem;letter-spacing:2px;padding:13px 22px;display:inline-block;border-right:1px solid #333;transition:background 0.15s,color 0.15s;position:relative;text-transform:uppercase;}
+nav a:first-child{border-left:1px solid #333;}
+nav a::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--red);transform:scaleX(0);transition:transform 0.2s;}
+nav a:hover{background:#1a1a1a;color:var(--orange);}
+nav a:hover::after{transform:scaleX(1);}
+nav a.active{color:var(--red);}
+nav a.active::after{transform:scaleX(1);}
+
+.fx-divider{position:relative;z-index:10;height:4px;background:linear-gradient(90deg,var(--fire),var(--water),var(--grass),var(--thunder),var(--fire));background-size:300% 100%;animation:slideGrad 4s linear infinite;}
+@keyframes slideGrad{0%{background-position:0%}100%{background-position:300%}}
+
+/* PAGE TITLE */
+.page-title{position:relative;z-index:10;padding:32px 32px 0;max-width:1100px;margin:0 auto;}
+.page-title h1{font-family:'Bangers',cursive;font-size:2.2rem;letter-spacing:4px;color:var(--white);display:flex;align-items:center;gap:14px;}
+.page-title h1::before{content:'';display:inline-block;width:6px;height:2rem;background:var(--red);}
+.page-title p{font-size:0.75rem;color:var(--lightgray);margin-top:6px;letter-spacing:1px;padding-left:20px;}
+
+/* FILTER TABS */
+.filter-bar{
+  position:relative;z-index:10;
+  max-width:1100px;
+  margin:24px auto 0;
+  padding:0 32px;
+  display:flex;
+  gap:0;
+  border-bottom:2px solid #1e1e1e;
+}
+.filter-btn{
+  background:none;
+  border:none;
+  color:var(--lightgray);
+  font-family:'Noto Sans JP',sans-serif;
+  font-weight:700;
+  font-size:0.78rem;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  padding:10px 20px;
+  cursor:pointer;
+  border-bottom:3px solid transparent;
+  margin-bottom:-2px;
+  transition:color 0.15s,border-color 0.15s;
+}
+.filter-btn:hover{color:var(--white);}
+.filter-btn.active{color:var(--white);border-bottom-color:var(--red);}
+
+/* GALLERY MAIN */
+.gallery-wrap{
+  position:relative;z-index:10;
+  max-width:1100px;
+  margin:28px auto 64px;
+  padding:0 32px;
+}
+
+/* SECTION LABEL */
+.section-label{
+  font-family:'Bangers',cursive;
+  font-size:0.85rem;
+  letter-spacing:4px;
+  color:var(--red);
+  border-bottom:1px solid #2a2a2a;
+  padding-bottom:8px;
+  margin-bottom:18px;
+  margin-top:36px;
+  text-transform:uppercase;
+}
+.section-label:first-child{margin-top:0;}
+
+/* ILLUST GRID — 3 col, square */
+.illust-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:8px;
+}
+
+.illust-thumb{
+  aspect-ratio:1/1;
+  background:#1a1a1a;
+  position:relative;
+  overflow:hidden;
+  cursor:pointer;
+}
+.illust-thumb::before{
+  content:'';
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    45deg,
+    #181818 0px,#181818 12px,
+    #1e1e1e 12px,#1e1e1e 24px
+  );
+}
+/* colored accent per type */
+.illust-thumb.type-fire::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--fire);}
+.illust-thumb.type-water::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--water);}
+.illust-thumb.type-grass::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--grass);}
+.illust-thumb.type-thunder::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--thunder);}
+
+.illust-thumb img{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
+  transition:transform 0.3s;
+}
+.illust-thumb:hover img{transform:scale(1.05);}
+
+.thumb-overlay{
+  position:absolute;inset:0;
+  background:rgba(0,0,0,0.65);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  opacity:0;
+  transition:opacity 0.2s;
+  padding:12px;
+}
+.illust-thumb:hover .thumb-overlay{opacity:1;}
+.thumb-overlay .t-title{
+  font-weight:900;
+  font-size:0.78rem;
+  text-align:center;
+  color:#fff;
+  line-height:1.4;
+}
+.thumb-overlay .t-type{
+  font-size:0.6rem;
+  font-weight:700;
+  letter-spacing:1px;
+  padding:2px 8px;
+  border-radius:2px;
+}
+.type-fire .t-type{background:rgba(255,69,0,0.3);color:var(--fire);}
+.type-water .t-type{background:rgba(0,191,255,0.25);color:var(--water);}
+.type-grass .t-type{background:rgba(57,211,83,0.25);color:var(--grass);}
+.type-thunder .t-type{background:rgba(255,215,0,0.25);color:var(--thunder);}
+.thumb-overlay .t-view{
+  font-size:0.65rem;
+  color:#aaa;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin-top:2px;
+}
+
+/* no-image placeholder label */
+.thumb-placeholder{
+  position:absolute;
+  bottom:10px;left:0;right:0;
+  text-align:center;
+  font-size:0.65rem;
+  font-weight:700;
+  color:#333;
+  letter-spacing:1px;
+  pointer-events:none;
+}
+
+/* MANGA GRID — 2 col, portrait */
+.manga-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.manga-thumb{
+  aspect-ratio:3/4;
+  background:#1a1a1a;
+  position:relative;
+  overflow:hidden;
+  cursor:pointer;
+}
+.manga-thumb::before{
+  content:'';
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    -45deg,
+    #181818 0px,#181818 14px,
+    #1e1e1e 14px,#1e1e1e 28px
+  );
+}
+.manga-thumb.type-fire::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--fire);}
+.manga-thumb.type-water::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--water);}
+.manga-thumb.type-grass::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--grass);}
+.manga-thumb.type-thunder::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--thunder);}
+
+.manga-thumb img{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
+  transition:transform 0.3s;
+}
+.manga-thumb:hover img{transform:scale(1.04);}
+.manga-thumb:hover .thumb-overlay{opacity:1;}
+
+/* page badge */
+.manga-badge{
+  position:absolute;
+  top:10px;right:10px;
+  background:var(--red);
+  color:#fff;
+  font-size:0.6rem;
+  font-weight:900;
+  letter-spacing:1px;
+  padding:3px 8px;
+  text-transform:uppercase;
+  z-index:2;
+}
+
+/* ===== LIGHTBOX ===== */
+#lightbox{
+  display:none;
+  position:fixed;inset:0;
+  z-index:1000;
+  background:rgba(0,0,0,0.92);
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:16px;
+  padding:24px;
+}
+#lightbox.open{display:flex;}
+
+#lb-img{
+  max-width:min(700px,90vw);
+  max-height:70vh;
+  object-fit:contain;
+  display:block;
+  background:#1a1a1a;
+}
+
+/* placeholder box when no image */
+#lb-placeholder{
+  width:min(700px,90vw);
+  height:400px;
+  background:#1a1a1a;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:12px;
+}
+#lb-placeholder .ph-icon{font-size:2.5rem;}
+#lb-placeholder .ph-text{font-size:0.78rem;color:#555;letter-spacing:2px;}
+
+#lb-info{
+  text-align:center;
+  max-width:min(700px,90vw);
+}
+#lb-title{
+  font-weight:900;
+  font-size:1rem;
+  margin-bottom:6px;
+}
+#lb-caption{
+  font-size:0.78rem;
+  color:var(--lightgray);
+  line-height:1.7;
+}
+
+#lb-close{
+  position:fixed;
+  top:20px;right:24px;
+  background:none;
+  border:none;
+  color:#fff;
+  font-size:2rem;
+  cursor:pointer;
+  line-height:1;
+  opacity:0.7;
+  transition:opacity 0.15s;
+  font-family:'Bangers',cursive;
+  letter-spacing:2px;
+}
+#lb-close:hover{opacity:1;}
+
+/* NAV ARROWS */
+.lb-nav{
+  position:fixed;
+  top:50%;transform:translateY(-50%);
+  background:none;border:none;
+  color:#fff;font-size:2.5rem;
+  cursor:pointer;opacity:0.4;
+  transition:opacity 0.15s;
+  font-family:'Bangers',cursive;
+  padding:20px 16px;
+  line-height:1;
+}
+.lb-nav:hover{opacity:1;}
+#lb-prev{left:8px;}
+#lb-next{right:8px;}
+
+/* FOOTER */
+footer{position:relative;z-index:10;background:#080808;border-top:3px solid var(--red);padding:24px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.footer-logo{font-family:'Bangers',cursive;font-size:1.6rem;letter-spacing:3px;color:var(--red);}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap;}
+.footer-links a{font-size:0.72rem;color:var(--lightgray);text-decoration:none;letter-spacing:1px;text-transform:uppercase;}
+.footer-links a:hover{color:var(--white);}
+.footer-copy{font-size:0.65rem;color:#444;letter-spacing:1px;}
+
+/* HIDDEN for filter */
+.gallery-item.hidden{display:none;}
+
+@media(max-width:700px){
+  .header-top{padding:10px 16px;}
+  nav{padding:0 8px;}
+  nav a{padding:12px 12px;font-size:0.72rem;}
+  .gallery-wrap,.page-title,.filter-bar{padding:0 16px;}
+  .page-title{padding:24px 16px 0;}
+  .filter-bar{margin:20px auto 0;}
+  .illust-grid{grid-template-columns:repeat(2,1fr);}
+  .manga-grid{grid-template-columns:1fr;}
+  footer{padding:20px 16px;}
+  .lb-nav{display:none;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="fx-canvas"></canvas>
+
+<header>
+  <div class="header-top">
+    <div>
+      <div class="logo"><span class="glow">MANGA</span><span class="fire">FLAME</span></div>
+      <div class="header-tagline">マンガ総合ファンサイト — The Ultimate Manga Fan Site</div>
+    </div>
+    <div class="header-issue">
+      <strong>WEEKLY UPDATE</strong>
+      毎週更新中
+    </div>
+  </div>
+  <nav>
+    <a href="index.html">HOME</a>
+    <a href="blog.html">BLOG</a>
+    <a href="ranking.html">RANKING</a>
+    <a href="gallery.html" class="active">GALLERY</a>
+    <a href="about.html">ABOUT</a>
+  </nav>
+</header>
+
+<div class="fx-divider"></div>
+
+<div class="page-title">
+  <h1>GALLERY</h1>
+  <p>ファンアート・漫画 — fanart &amp; original manga</p>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="all">ALL</button>
+  <button class="filter-btn" data-filter="illust">イラスト</button>
+  <button class="filter-btn" data-filter="manga">漫画</button>
+</div>
+
+<div class="gallery-wrap">
+
+  <!-- ILLUST SECTION -->
+  <div class="section-label" data-section="illust">🎨 イラスト</div>
+  <div class="illust-grid" id="illust-grid">
+
+    <div class="illust-thumb type-fire gallery-item" data-cat="illust"
+         data-title="炎の剣士" data-caption="バトル系ファンアート。炎の剣士をイメージして描きました。"
+         data-src="">
+      <div class="thumb-placeholder">No Image</div>
+      <div class="thumb-overlay">
+        <span class="t-type">🔥 バトル</span>
+        <span class="t-title">炎の剣士</span>
+        <span class="t-view">TAP TO VIEW</span>
+      </div>
+    </div>
+
+    <div class="illust-thumb type-water gallery-item" data-cat="illust"
+         data-title="水の精霊" data-caption="青をテーマにしたイラスト。透明感のある水属性キャラ。"
+         data-src="">
+      <div class="thumb-placeholder">No Image</div>
+      <div class="thumb-overlay">
+        <span class="t-type">💧 ファンタジー</span>
+        <span class="t-title">水の精霊</span>
+        <span class="t-view">TAP TO VIEW</span>
+      </div>
+    </div>
+
+    <div class="illust-thumb type-thunder gallery-item" data-cat="illust"
+         data-title="疾風の走者" data-caption="スポーツ系ファンアート。走る躍動感を意識して描きました。"
+         data-src="">
+      <div class="thumb-placeholder">No Image</div>
+      <div class="thumb-overlay">
+        <span class="t-type">⚡ スポーツ</span>
+        <span class="t-title">疾風の走者</span>
+        <span class="t-view">TAP TO VIEW</span>
+      </div>
+    </div>
+
+    <div class="illust-thumb type-grass gallery-item" data-cat="illust"
+         data-title="春の読書" data-caption="日常系イラスト。縁側で漫画を読むキャラクターを描きました。"
+         data-src="">
+      <div class="thumb-placeholder">No Image</div>
+      <div class="thumb-overlay">
+        <span class="t-type">🌿 日常</span>
+        <span class="t-title">春の読書</span>
+        <span class="t-view">TAP TO VIEW</span>
+      </div>
+    </div>
+
+    <div class="illust-thumb type-fire gallery-item" data-cat="illust"
+         data-title="決戦前夜" data-caption="バトル系。静かに決意を固めるシーンのイラスト。"
+         data-src="">
+      <div class="thumb-placeholder">No Image</div>
+      <div class="thumb-overlay">
+        <span class="t-type">🔥 バトル</span>
+        <span class="t-title">決戦前夜</span>
+        <span class="t-view">TAP TO VIEW</span>
+      </div>
+    </div>
+
+    <div class="illust-thumb type-water gallery-item" data-cat="illust"
+         data-title="夜雨のカフェ" data-caption="雨の日、カフェで過ごすキャラクター。恋愛系の雰囲気で。"
+         data-src="">
+      <div class="thumb-placeholder">No Image</div>
+      <div class="thumb-overlay">
+        <span class="t-type">💧 恋愛</span>
+        <span class="t-title">夜雨のカフェ</span>
+        <span class="t-view">TAP TO VIEW</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MANGA SECTION -->
+  <div class="section-label" data-section="manga">📖 漫画</div>
+  <div class="manga-grid" id="manga-grid">
+
+    <div class="manga-thumb type-fire gallery-item" data-cat="manga"
+         data-title="炎の試練 #1" data-caption="オリジナル短編漫画。炎使いの少年が師匠と出会うまでの話。全4ページ。"
+         data-src="">
+      <div class="manga-badge">4 PAGES</div>
+      <div class="thumb-placeholder">No Image</div>
+      <div class="thumb-overlay">
+        <span class="t-type">🔥 バトル</span>
+        <span class="t-title">炎の試練 #1</span>
+        <span class="t-view">TAP TO VIEW</span>
+      </div>
+    </div>
+
+    <div class="manga-thumb type-grass gallery-item" data-cat="manga"
+         data-title="となりのページ" data-caption="日常系短編漫画。図書室で毎日会う二人のお話。全6ページ。"
+         data-src="">
+      <div class="manga-badge">6 PAGES</div>
+      <div class="thumb-placeholder">No Image</div>
+      <div class="thumb-overlay">
+        <span class="t-type">🌿 日常</span>
+        <span class="t-title">となりのページ</span>
+        <span class="t-view">TAP TO VIEW</span>
+      </div>
+    </div>
+
+    <div class="manga-thumb type-thunder gallery-item" data-cat="manga"
+         data-title="最後の一本" data-caption="スポーツ系短編漫画。試合最終盤、全力を出し切る選手の話。全3ページ。"
+         data-src="">
+      <div class="manga-badge">3 PAGES</div>
+      <div class="thumb-placeholder">No Image</div>
+      <div class="thumb-overlay">
+        <span class="t-type">⚡ スポーツ</span>
+        <span class="t-title">最後の一本</span>
+        <span class="t-view">TAP TO VIEW</span>
+      </div>
+    </div>
+
+    <div class="manga-thumb type-water gallery-item" data-cat="manga"
+         data-title="さよならの前に" data-caption="切ない恋愛短編漫画。別れの日に気持ちを伝えようとする話。全5ページ。"
+         data-src="">
+      <div class="manga-badge">5 PAGES</div>
+      <div class="thumb-placeholder">No Image</div>
+      <div class="thumb-overlay">
+        <span class="t-type">💧 恋愛</span>
+        <span class="t-title">さよならの前に</span>
+        <span class="t-view">TAP TO VIEW</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <button id="lb-close">✕</button>
+  <button class="lb-nav" id="lb-prev">‹</button>
+  <button class="lb-nav" id="lb-next">›</button>
+  <div id="lb-placeholder">
+    <div class="ph-icon">🖼️</div>
+    <div class="ph-text">IMAGE PLACEHOLDER</div>
+    <div class="ph-text" id="lb-ph-name"></div>
+  </div>
+  <img id="lb-img" src="" alt="" style="display:none;">
+  <div id="lb-info">
+    <div id="lb-title"></div>
+    <div id="lb-caption"></div>
+  </div>
+</div>
+
+<div class="fx-divider"></div>
+
+<footer>
+  <div>
+    <div class="footer-logo">MANGAFLAME</div>
+    <div style="font-size:0.65rem;color:#444;margin-top:4px;letter-spacing:1px;">マンガ総合ファンサイト</div>
+  </div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="blog.html">Blog</a>
+    <a href="ranking.html">Ranking</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="about.html">About</a>
+  </div>
+  <div class="footer-copy">© 2024 MANGAFLAME — 二次創作・オリジナル作品</div>
+</footer>
+
+<script>
+/* ---- FILTER ---- */
+const filterBtns=document.querySelectorAll('.filter-btn');
+const items=document.querySelectorAll('.gallery-item');
+const sections=document.querySelectorAll('[data-section]');
+const illustGrid=document.getElementById('illust-grid');
+const mangaGrid=document.getElementById('manga-grid');
+
+filterBtns.forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    filterBtns.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const f=btn.dataset.filter;
+    items.forEach(item=>{
+      if(f==='all'||item.dataset.cat===f){item.classList.remove('hidden');}
+      else{item.classList.add('hidden');}
+    });
+    // hide section labels when filtered
+    sections.forEach(s=>{
+      if(f==='all'){s.style.display='';}
+      else if(s.dataset.section===f){s.style.display='';}
+      else{s.style.display='none';}
+    });
+    // hide empty grid wrapper
+    illustGrid.style.display=(f==='manga')?'none':'';
+    mangaGrid.style.display=(f==='illust')?'none':'';
+  });
+});
+
+/* ---- LIGHTBOX ---- */
+const lb=document.getElementById('lightbox');
+const lbImg=document.getElementById('lb-img');
+const lbPh=document.getElementById('lb-placeholder');
+const lbPhName=document.getElementById('lb-ph-name');
+const lbTitle=document.getElementById('lb-title');
+const lbCaption=document.getElementById('lb-caption');
+const lbClose=document.getElementById('lb-close');
+const lbPrev=document.getElementById('lb-prev');
+const lbNext=document.getElementById('lb-next');
+
+let visibleItems=[];
+let currentIdx=0;
+
+function getVisible(){
+  return Array.from(items).filter(i=>!i.classList.contains('hidden'));
+}
+
+function openLb(idx){
+  visibleItems=getVisible();
+  currentIdx=idx;
+  showLbItem();
+  lb.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function showLbItem(){
+  const item=visibleItems[currentIdx];
+  const src=item.dataset.src;
+  const title=item.dataset.title;
+  const caption=item.dataset.caption;
+  lbTitle.textContent=title;
+  lbCaption.textContent=caption;
+  if(src){
+    lbImg.src=src;
+    lbImg.style.display='block';
+    lbPh.style.display='none';
+  } else {
+    lbImg.style.display='none';
+    lbPh.style.display='flex';
+    lbPhName.textContent=title;
+  }
+}
+
+function closeLb(){
+  lb.classList.remove('open');
+  document.body.style.overflow='';
+}
+
+items.forEach((item,i)=>{
+  item.addEventListener('click',()=>{
+    visibleItems=getVisible();
+    const vIdx=visibleItems.indexOf(item);
+    openLb(vIdx);
+  });
+});
+
+lbClose.addEventListener('click',closeLb);
+lb.addEventListener('click',e=>{if(e.target===lb)closeLb();});
+
+lbPrev.addEventListener('click',e=>{
+  e.stopPropagation();
+  currentIdx=(currentIdx-1+visibleItems.length)%visibleItems.length;
+  showLbItem();
+});
+lbNext.addEventListener('click',e=>{
+  e.stopPropagation();
+  currentIdx=(currentIdx+1)%visibleItems.length;
+  showLbItem();
+});
+
+document.addEventListener('keydown',e=>{
+  if(!lb.classList.contains('open'))return;
+  if(e.key==='Escape')closeLb();
+  if(e.key==='ArrowLeft'){currentIdx=(currentIdx-1+visibleItems.length)%visibleItems.length;showLbItem();}
+  if(e.key==='ArrowRight'){currentIdx=(currentIdx+1)%visibleItems.length;showLbItem();}
+});
+
+/* ---- FX CANVAS ---- */
+(function(){
+  const canvas=document.getElementById('fx-canvas');
+  const ctx=canvas.getContext('2d');
+  let W,H,particles=[];
+  const TYPES=[
+    {name:'fire',color:'rgba(255,69,0,'},
+    {name:'water',color:'rgba(0,191,255,'},
+    {name:'grass',color:'rgba(57,211,83,'},
+    {name:'thunder',color:'rgba(255,215,0,'},
+  ];
+  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+  function makeParticle(){
+    const t=TYPES[Math.floor(Math.random()*TYPES.length)];
+    const size=4+Math.random()*10;
+    return{x:Math.random()*W,y:H+size,vx:(Math.random()-0.5)*0.5,vy:-(0.2+Math.random()*0.6),size,alpha:0.08+Math.random()*0.3,type:t,rot:Math.random()*Math.PI*2,rotv:(Math.random()-0.5)*0.03,life:0,maxLife:200+Math.random()*400};
+  }
+  function init(){
+    resize();
+    for(let i=0;i<50;i++){const p=makeParticle();p.y=Math.random()*H;p.life=Math.random()*p.maxLife;particles.push(p);}
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    particles.forEach(p=>{
+      const fade=Math.min(p.life/30,1)*Math.min((p.maxLife-p.life)/30,1);
+      ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=p.alpha*fade;
+      if(p.type.name==='fire'){ctx.fillStyle=p.type.color+'1)';ctx.fillRect(-p.size/4,-p.size/2,p.size/2,p.size);}
+      else if(p.type.name==='thunder'){ctx.strokeStyle=p.type.color+'1)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(p.size/2,-p.size/2);ctx.lineTo(-p.size/4,0);ctx.lineTo(p.size/4,0);ctx.lineTo(-p.size/2,p.size/2);ctx.stroke();}
+      else if(p.type.name==='water'){ctx.fillStyle=p.type.color+'1)';ctx.beginPath();ctx.arc(0,0,p.size/2,0,Math.PI*2);ctx.fill();}
+      else{ctx.strokeStyle=p.type.color+'1)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(-p.size/2,0);ctx.lineTo(p.size/2,0);ctx.moveTo(0,-p.size/2);ctx.lineTo(0,p.size/2);ctx.stroke();}
+      ctx.restore();
+      p.x+=p.vx;p.y+=p.vy;p.rot+=p.rotv;p.life++;
+      if(p.life>p.maxLife)Object.assign(p,makeParticle());
+    });
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',resize);
+  init();draw();
+})();
+</script>
+
+</body>
+</html>
