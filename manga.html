@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ABOUT — MANGAFLAME</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#E8001A;
+  --orange:#FF6B00;
+  --darkgray:#1A1A1A;
+  --lightgray:#B0B0B0;
+  --white:#F5F5F5;
+  --fire:#FF4500;
+  --water:#00BFFF;
+  --grass:#39D353;
+  --thunder:#FFD700;
+}
+body{
+  background:#0D0D0D;
+  color:var(--white);
+  font-family:'Noto Sans JP',sans-serif;
+  overflow-x:hidden;
+}
+#fx-canvas{
+  position:fixed;top:0;left:0;
+  width:100%;height:100%;
+  pointer-events:none;z-index:0;opacity:0.18;
+}
+
+/* HEADER */
+header{position:relative;z-index:100;background:#0D0D0D;border-bottom:4px solid var(--red);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 32px;border-bottom:1px solid #333;}
+.logo{font-family:'Bangers',cursive;font-size:3rem;letter-spacing:4px;line-height:1;}
+.logo span.fire{color:var(--red);}
+.logo span.glow{color:var(--white);text-shadow:0 0 20px var(--red),0 0 40px var(--orange);}
+.header-tagline{font-size:0.65rem;letter-spacing:3px;color:var(--lightgray);text-transform:uppercase;margin-top:2px;}
+.header-issue{text-align:right;font-size:0.72rem;color:var(--lightgray);letter-spacing:1px;}
+.header-issue strong{display:block;font-size:1.1rem;color:var(--white);font-family:'Bangers',cursive;letter-spacing:2px;}
+nav{display:flex;align-items:center;padding:0 32px;background:#0D0D0D;}
+nav a{color:var(--white);text-decoration:none;font-weight:700;font-size:0.82rem;letter-spacing:2px;padding:13px 22px;display:inline-block;border-right:1px solid #333;transition:background 0.15s,color 0.15s;position:relative;text-transform:uppercase;}
+nav a:first-child{border-left:1px solid #333;}
+nav a::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--red);transform:scaleX(0);transition:transform 0.2s;}
+nav a:hover{background:#1a1a1a;color:var(--orange);}
+nav a:hover::after{transform:scaleX(1);}
+nav a.active{color:var(--red);}
+nav a.active::after{transform:scaleX(1);}
+
+.fx-divider{position:relative;z-index:10;height:4px;background:linear-gradient(90deg,var(--fire),var(--water),var(--grass),var(--thunder),var(--fire));background-size:300% 100%;animation:slideGrad 4s linear infinite;}
+@keyframes slideGrad{0%{background-position:0%}100%{background-position:300%}}
+
+/* PAGE TITLE */
+.page-title{position:relative;z-index:10;padding:32px 32px 0;max-width:680px;margin:0 auto;}
+.page-title h1{font-family:'Bangers',cursive;font-size:2.2rem;letter-spacing:4px;color:var(--white);display:flex;align-items:center;gap:14px;}
+.page-title h1::before{content:'';display:inline-block;width:6px;height:2rem;background:var(--red);}
+.page-title p{font-size:0.75rem;color:var(--lightgray);margin-top:6px;letter-spacing:1px;padding-left:20px;}
+
+/* MAIN */
+.about-wrap{
+  position:relative;z-index:10;
+  max-width:680px;
+  margin:28px auto 64px;
+  padding:0 32px;
+  display:flex;
+  flex-direction:column;
+  gap:36px;
+}
+
+/* SECTION LABEL */
+.section-label{
+  font-family:'Bangers',cursive;
+  font-size:0.85rem;
+  letter-spacing:4px;
+  color:var(--red);
+  padding-bottom:8px;
+  margin-bottom:16px;
+  border-bottom:1px solid #2a2a2a;
+  text-transform:uppercase;
+}
+
+/* ===== PROFILE ===== */
+.profile-card{
+  background:var(--darkgray);
+  border-left:4px solid var(--red);
+  padding:24px 24px;
+}
+.profile-inner{
+  display:flex;
+  gap:20px;
+  align-items:flex-start;
+}
+.profile-avatar{
+  width:72px;height:72px;
+  border-radius:50%;
+  background:#111;
+  border:3px solid var(--red);
+  display:flex;align-items:center;justify-content:center;
+  font-size:2rem;
+  flex-shrink:0;
+}
+.profile-info{}
+.profile-name{
+  font-family:'Bangers',cursive;
+  font-size:1.6rem;
+  letter-spacing:3px;
+  color:var(--white);
+  line-height:1;
+  margin-bottom:4px;
+}
+.profile-handle{
+  font-size:0.72rem;
+  color:var(--lightgray);
+  letter-spacing:1px;
+  margin-bottom:14px;
+}
+.profile-bio{
+  font-size:0.85rem;
+  color:#ccc;
+  line-height:1.9;
+}
+
+/* ability tags under bio */
+.ability-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:14px;
+}
+.atag{
+  font-size:0.65rem;
+  font-weight:700;
+  letter-spacing:1px;
+  padding:3px 10px;
+  border-radius:2px;
+}
+.atag-fire{background:rgba(255,69,0,0.18);color:var(--fire);}
+.atag-water{background:rgba(0,191,255,0.15);color:var(--water);}
+.atag-grass{background:rgba(57,211,83,0.15);color:var(--grass);}
+.atag-thunder{background:rgba(255,215,0,0.15);color:var(--thunder);}
+
+/* ===== LINK GRID ===== */
+.link-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.link-card{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-decoration:none;
+  background:#151515;
+  border:1px solid #2a2a2a;
+  border-left:3px solid #333;
+  padding:13px 14px;
+  transition:background 0.15s,border-left-color 0.15s;
+}
+.link-card:hover{background:#1e1e1e;border-left-color:var(--red);}
+.link-icon{
+  font-size:1.2rem;
+  width:38px;height:38px;
+  background:#1e1e1e;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  border-radius:2px;
+}
+.link-text{flex:1;min-width:0;}
+.link-name{display:block;font-size:0.82rem;font-weight:700;color:var(--white);margin-bottom:2px;}
+.link-desc{display:block;font-size:0.68rem;color:var(--lightgray);line-height:1.5;}
+.link-arrow{color:#444;font-size:1rem;flex-shrink:0;transition:color 0.15s,transform 0.15s;}
+.link-card:hover .link-arrow{color:var(--red);transform:translateX(3px);}
+
+/* ===== CONTACT FORM ===== */
+.form-card{
+  background:var(--darkgray);
+  border-top:3px solid var(--red);
+  padding:24px;
+}
+.form-intro{
+  font-size:0.8rem;
+  color:var(--lightgray);
+  line-height:1.8;
+  margin-bottom:20px;
+}
+.form-group{margin-bottom:16px;}
+.form-label{
+  display:block;
+  font-size:0.72rem;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--lightgray);
+  margin-bottom:7px;
+}
+.required{color:var(--red);margin-left:3px;}
+.form-input,.form-textarea{
+  width:100%;
+  background:#111;
+  border:1px solid #333;
+  border-bottom:2px solid #444;
+  color:var(--white);
+  font-family:'Noto Sans JP',sans-serif;
+  font-size:0.88rem;
+  padding:10px 14px;
+  outline:none;
+  transition:border-color 0.2s;
+  border-radius:0;
+}
+.form-input::placeholder,.form-textarea::placeholder{color:#444;}
+.form-input:focus,.form-textarea:focus{border-color:#333;border-bottom-color:var(--red);}
+.form-textarea{resize:vertical;min-height:130px;}
+
+.form-submit{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:var(--red);
+  border:none;
+  color:#fff;
+  font-family:'Noto Sans JP',sans-serif;
+  font-weight:900;
+  font-size:0.82rem;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  padding:12px 28px;
+  cursor:pointer;
+  clip-path:polygon(0 0,100% 0,93% 100%,0 100%);
+  transition:background 0.15s;
+  margin-top:4px;
+}
+.form-submit:hover{background:var(--orange);}
+.form-submit:disabled{opacity:0.4;cursor:not-allowed;}
+
+.form-success{
+  background:#0d1f0d;
+  border:1px solid var(--grass);
+  padding:14px 18px;
+  color:var(--grass);
+  font-size:0.82rem;
+  margin-bottom:16px;
+  display:none;
+  letter-spacing:1px;
+}
+.form-error{
+  background:#1f0d0d;
+  border:1px solid var(--red);
+  padding:10px 14px;
+  color:#ff8080;
+  font-size:0.78rem;
+  margin-bottom:14px;
+  display:none;
+}
+
+/* FOOTER */
+footer{position:relative;z-index:10;background:#080808;border-top:3px solid var(--red);padding:24px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.footer-logo{font-family:'Bangers',cursive;font-size:1.6rem;letter-spacing:3px;color:var(--red);}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap;}
+.footer-links a{font-size:0.72rem;color:var(--lightgray);text-decoration:none;letter-spacing:1px;text-transform:uppercase;}
+.footer-links a:hover{color:var(--white);}
+.footer-copy{font-size:0.65rem;color:#444;letter-spacing:1px;}
+
+@media(max-width:600px){
+  .header-top{padding:10px 16px;}
+  nav{padding:0 8px;}
+  nav a{padding:12px 12px;font-size:0.72rem;}
+  .about-wrap,.page-title{padding:0 16px;}
+  .page-title{padding:24px 16px 0;}
+  .profile-inner{flex-direction:column;gap:14px;}
+  .link-grid{grid-template-columns:1fr;}
+  footer{padding:20px 16px;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="fx-canvas"></canvas>
+
+<header>
+  <div class="header-top">
+    <div>
+      <div class="logo"><span class="glow">MANGA</span><span class="fire">FLAME</span></div>
+      <div class="header-tagline">マンガ総合ファンサイト — The Ultimate Manga Fan Site</div>
+    </div>
+    <div class="header-issue">
+      <strong>WEEKLY UPDATE</strong>
+      毎週更新中
+    </div>
+  </div>
+  <nav>
+    <a href="index.html">HOME</a>
+    <a href="blog.html">BLOG</a>
+    <a href="ranking.html">RANKING</a>
+    <a href="gallery.html">GALLERY</a>
+    <a href="about.html" class="active">ABOUT</a>
+  </nav>
+</header>
+
+<div class="fx-divider"></div>
+
+<div class="page-title">
+  <h1>ABOUT</h1>
+  <p>このサイトについて — about this site</p>
+</div>
+
+<div class="about-wrap">
+
+  <!-- PROFILE -->
+  <div>
+    <div class="section-label">🔥 Profile</div>
+    <div class="profile-card">
+      <div class="profile-inner">
+        <div class="profile-avatar">🔥</div>
+        <div class="profile-info">
+          <div class="profile-name">MANGAFLAME</div>
+          <div class="profile-handle">@mangaflame</div>
+          <p class="profile-bio">
+            漫画が好きで、好きで、好きすぎてサイトを作ってしまいました。<br>
+            ジャンルを問わず読みますが、特にバトル・スポーツ・日常系が好きです。<br>
+            週に一度はランキングを見直し、毎週ブログを更新しています。<br>
+            ファンアートも細々と描いています。
+          </p>
+          <div class="ability-tags">
+            <span class="atag atag-fire">🔥 バトル</span>
+            <span class="atag atag-thunder">⚡ スポーツ</span>
+            <span class="atag atag-grass">🌿 日常</span>
+            <span class="atag atag-water">💧 恋愛</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LINKS -->
+  <div>
+    <div class="section-label">⚡ Websites</div>
+    <div class="link-grid">
+
+      <a class="link-card" href="https://bsky.app/profile/azaleaazalea88.bsky.social" target="_blank" rel="noopener">
+        <div class="link-icon">🦋</div>
+        <div class="link-text">
+          <span class="link-name">Bluesky</span>
+          <span class="link-desc">近況・更新のお知らせ</span>
+        </div>
+        <span class="link-arrow">›</span>
+      </a>
+
+      <a class="link-card" href="https://www.pixiv.net/" target="_blank" rel="noopener">
+        <div class="link-icon">🎨</div>
+        <div class="link-text">
+          <span class="link-name">Pixiv</span>
+          <span class="link-desc">イラスト・ファンアート</span>
+        </div>
+        <span class="link-arrow">›</span>
+      </a>
+
+      <a class="link-card" href="https://azaleacreativeroom888.github.io/Azaleamangaroom/" target="_blank" rel="noopener">
+        <div class="link-icon">📖</div>
+        <div class="link-text">
+          <span class="link-name">漫画掲載サイト</span>
+          <span class="link-desc">オリジナル漫画を掲載</span>
+        </div>
+        <span class="link-arrow">›</span>
+      </a>
+
+      <a class="link-card" href="https://kakuyomu.jp/users/azalea_azalea72" target="_blank" rel="noopener">
+        <div class="link-icon">✒️</div>
+        <div class="link-text">
+          <span class="link-name">カクヨム</span>
+          <span class="link-desc">小説を掲載中</span>
+        </div>
+        <span class="link-arrow">›</span>
+      </a>
+
+      <a class="link-card" href="https://azaleacreativeroom888.github.io/" target="_blank" rel="noopener">
+        <div class="link-icon">🌸</div>
+        <div class="link-text">
+          <span class="link-name">Azalea Creative Room</span>
+          <span class="link-desc">運営サイト一覧</span>
+        </div>
+        <span class="link-arrow">›</span>
+      </a>
+
+      <a class="link-card" href="https://www.youtube.com/" target="_blank" rel="noopener">
+        <div class="link-icon">▶️</div>
+        <div class="link-text">
+          <span class="link-name">YouTube</span>
+          <span class="link-desc">リリポピ / LilyPopins</span>
+        </div>
+        <span class="link-arrow">›</span>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- CONTACT FORM -->
+  <div>
+    <div class="section-label">📮 Contact</div>
+    <div class="form-card">
+      <p class="form-intro">
+        ご感想・ご質問・ファンアートの感想などはこちらからどうぞ。<br>
+        返信は2〜3日を目安にしています。
+      </p>
+
+      <div class="form-success" id="form-success">
+        ✅ メッセージを送信しました。ありがとうございます！
+      </div>
+      <div class="form-error" id="form-error"></div>
+
+      <form id="contact-form" action="https://formspree.io/f/maqvpvoz" method="POST">
+        <div class="form-group">
+          <label class="form-label" for="name">お名前</label>
+          <input class="form-input" type="text" id="name" name="name" placeholder="名前（任意）">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email">メールアドレス<span class="required">*</span></label>
+          <input class="form-input" type="email" id="email" name="email" placeholder="example@email.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="message">メッセージ<span class="required">*</span></label>
+          <textarea class="form-textarea" id="message" name="message" placeholder="メッセージを入力してください…" required></textarea>
+        </div>
+        <button class="form-submit" type="submit" id="submit-btn">📮 送信する</button>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<div class="fx-divider"></div>
+
+<footer>
+  <div>
+    <div class="footer-logo">MANGAFLAME</div>
+    <div style="font-size:0.65rem;color:#444;margin-top:4px;letter-spacing:1px;">マンガ総合ファンサイト</div>
+  </div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="blog.html">Blog</a>
+    <a href="ranking.html">Ranking</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="about.html">About</a>
+  </div>
+  <div class="footer-copy">© 2024 MANGAFLAME — 掲載作品の著作権は各作者・出版社に帰属します</div>
+</footer>
+
+<script>
+const form=document.getElementById('contact-form');
+const successMsg=document.getElementById('form-success');
+const errorMsg=document.getElementById('form-error');
+const submitBtn=document.getElementById('submit-btn');
+
+form.addEventListener('submit',async function(e){
+  e.preventDefault();
+  submitBtn.disabled=true;
+  submitBtn.textContent='送信中…';
+  errorMsg.style.display='none';
+
+  try{
+    const res=await fetch(form.action,{
+      method:'POST',
+      body:new FormData(form),
+      headers:{Accept:'application/json'}
+    });
+    if(res.ok){
+      successMsg.style.display='block';
+      form.reset();
+      successMsg.scrollIntoView({behavior:'smooth',block:'nearest'});
+    } else {
+      throw new Error();
+    }
+  } catch {
+    errorMsg.textContent='送信に失敗しました。しばらくしてからもう一度お試しください。';
+    errorMsg.style.display='block';
+    submitBtn.disabled=false;
+    submitBtn.textContent='📮 送信する';
+  }
+});
+
+/* FX CANVAS */
+(function(){
+  const canvas=document.getElementById('fx-canvas');
+  const ctx=canvas.getContext('2d');
+  let W,H,particles=[];
+  const TYPES=[
+    {name:'fire',color:'rgba(255,69,0,'},
+    {name:'water',color:'rgba(0,191,255,'},
+    {name:'grass',color:'rgba(57,211,83,'},
+    {name:'thunder',color:'rgba(255,215,0,'},
+  ];
+  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+  function makeParticle(){
+    const t=TYPES[Math.floor(Math.random()*TYPES.length)];
+    const size=4+Math.random()*10;
+    return{x:Math.random()*W,y:H+size,vx:(Math.random()-0.5)*0.5,vy:-(0.2+Math.random()*0.6),size,alpha:0.08+Math.random()*0.3,type:t,rot:Math.random()*Math.PI*2,rotv:(Math.random()-0.5)*0.03,life:0,maxLife:200+Math.random()*400};
+  }
+  function init(){
+    resize();
+    for(let i=0;i<50;i++){const p=makeParticle();p.y=Math.random()*H;p.life=Math.random()*p.maxLife;particles.push(p);}
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    particles.forEach(p=>{
+      const fade=Math.min(p.life/30,1)*Math.min((p.maxLife-p.life)/30,1);
+      ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=p.alpha*fade;
+      if(p.type.name==='fire'){ctx.fillStyle=p.type.color+'1)';ctx.fillRect(-p.size/4,-p.size/2,p.size/2,p.size);}
+      else if(p.type.name==='thunder'){ctx.strokeStyle=p.type.color+'1)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(p.size/2,-p.size/2);ctx.lineTo(-p.size/4,0);ctx.lineTo(p.size/4,0);ctx.lineTo(-p.size/2,p.size/2);ctx.stroke();}
+      else if(p.type.name==='water'){ctx.fillStyle=p.type.color+'1)';ctx.beginPath();ctx.arc(0,0,p.size/2,0,Math.PI*2);ctx.fill();}
+      else{ctx.strokeStyle=p.type.color+'1)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(-p.size/2,0);ctx.lineTo(p.size/2,0);ctx.moveTo(0,-p.size/2);ctx.lineTo(0,p.size/2);ctx.stroke();}
+      ctx.restore();
+      p.x+=p.vx;p.y+=p.vy;p.rot+=p.rotv;p.life++;
+      if(p.life>p.maxLife)Object.assign(p,makeParticle());
+    });
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',resize);
+  init();draw();
+})();
+</script>
+
+</body>
+</html>
