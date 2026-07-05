@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BLOG — 星芒の漫画サイト</title>
-<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
   --bg:#FFFDE7;--bg2:#FFF8E1;--bg3:#FFF3CD;
-  --accent:#C8000F;--accent2:#E85000;
+  --accent:#C8000F;
   --black:#1A1008;--dark:#2E2010;--mid:#6B4F2A;--sub:#9A7A4A;
   --border:#E8D080;--border2:#D4B84A;
   --fire:#E85000;--water:#0077AA;--grass:#2D8A2D;--thunder:#C8920A;
@@ -41,29 +41,37 @@ nav a.active::after{transform:scaleX(1);}
 .page-title h1::before{content:'';display:inline-block;width:6px;height:1.8rem;background:var(--accent);}
 .page-title p{font-size:0.75rem;color:var(--sub);margin-top:6px;letter-spacing:1px;padding-left:20px;}
 
+/* FEED */
 .feed{position:relative;z-index:10;max-width:640px;margin:24px auto 60px;padding:0 32px;display:flex;flex-direction:column;}
 
 .year-divider{display:flex;align-items:center;gap:12px;padding:20px 0 8px;}
 .year-divider span{font-weight:900;font-size:1rem;letter-spacing:3px;color:var(--accent);}
 .year-divider::after{content:'';flex:1;height:1px;background:var(--border);}
 
-.post{display:flex;gap:0;padding:0;border-bottom:1px solid var(--border);}
-.post-left{display:flex;flex-direction:column;align-items:center;width:44px;flex-shrink:0;padding-top:4px;}
-.post-avatar{width:36px;height:36px;border-radius:50%;background:var(--bg3);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
-.post-line{width:2px;flex:1;background:var(--border);margin-top:6px;}
-.post:last-child .post-line{display:none;}
-.post-body{flex:1;padding:4px 0 20px 14px;}
-.post-meta{display:flex;align-items:baseline;gap:8px;margin-bottom:7px;}
-.post-name{font-weight:900;font-size:0.85rem;color:var(--black);}
-.post-handle{font-size:0.75rem;color:var(--sub);}
-.post-date{font-size:0.72rem;color:var(--sub);margin-left:auto;font-family:monospace;letter-spacing:0.5px;}
-.post-text{font-size:0.88rem;line-height:1.8;color:var(--dark);}
+.post{
+  display:flex;
+  gap:20px;
+  padding:16px 0;
+  border-bottom:1px solid var(--border);
+  align-items:baseline;
+}
+.post:last-child{border-bottom:none;}
 
-.post-tag{display:inline-block;font-size:0.62rem;font-weight:700;letter-spacing:1px;padding:2px 8px;border-radius:2px;margin-bottom:8px;}
-.tag-fire{background:rgba(232,80,0,0.12);color:var(--fire);}
-.tag-water{background:rgba(0,119,170,0.12);color:var(--water);}
-.tag-grass{background:rgba(45,138,45,0.12);color:var(--grass);}
-.tag-thunder{background:rgba(200,146,10,0.15);color:var(--thunder);}
+.post-date{
+  font-size:0.72rem;
+  color:var(--sub);
+  font-family:monospace;
+  letter-spacing:0.5px;
+  white-space:nowrap;
+  flex-shrink:0;
+  padding-top:1px;
+}
+
+.post-text{
+  font-size:0.9rem;
+  line-height:1.85;
+  color:var(--dark);
+}
 
 footer{position:relative;z-index:10;background:var(--bg3);border-top:3px solid var(--accent);padding:24px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
 .footer-logo{font-weight:900;font-size:1.3rem;letter-spacing:2px;color:var(--accent);}
@@ -95,24 +103,83 @@ footer{position:relative;z-index:10;background:var(--bg3);border-top:3px solid v
 </header>
 <div class="fx-divider"></div>
 <div class="page-title"><h1>BLOG</h1><p>日々の漫画ログ — manga diary</p></div>
+
 <div class="feed">
   <div class="year-divider"><span>2026</span></div>
 
-  <div class="post"><div class="post-left"><div class="post-avatar">💧</div><div class="post-line"></div></div><div class="post-body"><div class="post-meta"><span class="post-date">2026.06.26</span></div><span class="post-tag tag-thunder">🔥 バトル</span><p class="post-text">MANGA甲子園観た。面白かった。最終作品はるらりーなの作品が一番好きだったし人柄も一番魅力があった。</p></div></div>
-  <div class="post"><div class="post-left"><div class="post-avatar">💧</div><div class="post-line"></div></div><div class="post-body"><div class="post-meta"><span class="post-date">2026.06.26</span></div><span class="post-tag tag-fire">💧 恋愛</span><p class="post-text">フルーツバスケットは本当に好き。 人生で一番辛いときに読んだから、フルーツバスケットのおかげで 生きてこれた。</p></div></div>
-  <div class="post"><div class="post-left"><div class="post-avatar">🔥</div><div class="post-line"></div></div><div class="post-body"><div class="post-meta"><span class="post-name">星芒の漫画サイト</span><span class="post-handle">@seibou_manga</span><span class="post-date">2024.07.08</span></div><span class="post-tag tag-thunder">🔥 バトル</span><p class="post-text">ハンターハンター読んでるんだけど、語感がすごく良い名前が多い。ウボォーギン！！！</p></div></div>
-  <div class="post"><div class="post-left"><div class="post-avatar">🌿</div><div class="post-line"></div></div><div class="post-body"><div class="post-meta"><span class="post-name">星芒の漫画サイト</span><span class="post-handle">@seibou_manga</span><span class="post-date">2024.07.01</span></div><span class="post-tag tag-grass">🌿 日常</span><p class="post-text">ファンアートを描き始めてわかったこと：好きなキャラのことをもっと好きになる。輪郭を追うたびに「この角度こんな顔なのか」って発見がある。絵が下手でも描く価値があると思った。</p></div></div>
-  <div class="post"><div class="post-left"><div class="post-avatar">🔥</div><div class="post-line"></div></div><div class="post-body"><div class="post-meta"><span class="post-name">星芒の漫画サイト</span><span class="post-handle">@seibou_manga</span><span class="post-date">2024.06.24</span></div><span class="post-tag tag-fire">🔥 バトル</span><p class="post-text">名作漫画の「1話目」の完成度について考えた。あの限られたページ数で世界を構築して読者を引き込む。1話目って作者の全力投球なんだよな。好きな漫画の1話だけを読み比べる時間がいちばん楽しいかもしれない。</p></div></div>
-  <div class="post"><div class="post-left"><div class="post-avatar">⚡</div><div class="post-line"></div></div><div class="post-body"><div class="post-meta"><span class="post-name">星芒の漫画サイト</span><span class="post-handle">@seibou_manga</span><span class="post-date">2024.06.17</span></div><span class="post-tag tag-thunder">⚡ バトル</span><p class="post-text">バトル漫画における能力系と武器系の違い、ずっと言語化できてなかったけど今日わかった気がする。能力系は「自分の可能性を広げる」戦い、武器系は「技術を極める」戦い。どっちも熱いけど感動のポイントが違う。</p></div></div>
-  <div class="post"><div class="post-left"><div class="post-avatar">💧</div><div class="post-line"></div></div><div class="post-body"><div class="post-meta"><span class="post-name">星芒の漫画サイト</span><span class="post-handle">@seibou_manga</span><span class="post-date">2024.06.10</span></div><span class="post-tag tag-water">💧 恋愛</span><p class="post-text">恋愛漫画って「言えない気持ち」を描くのが上手い作品ほど好きだと気づいた。セリフより表情、表情より間のコマ。その沈黙のページを何度も読み返してしまう。</p></div></div>
-  <div class="post"><div class="post-left"><div class="post-avatar">🌿</div><div class="post-line"></div></div><div class="post-body"><div class="post-meta"><span class="post-name">星芒の漫画サイト</span><span class="post-handle">@seibou_manga</span><span class="post-date">2024.06.03</span></div><span class="post-tag tag-grass">🌿 日常</span><p class="post-text">日常系漫画の「何も起きない回」が好き。主人公が部屋でゴロゴロして終わる回とか、友達とくだらない話だけして終わる回とか。漫画でしか描けないあの贅沢な時間の使い方。</p></div></div>
-  <div class="post"><div class="post-left"><div class="post-avatar">🔥</div><div class="post-line"></div></div><div class="post-body"><div class="post-meta"><span class="post-name">星芒の漫画サイト</span><span class="post-handle">@seibou_manga</span><span class="post-date">2024.05.27</span></div><span class="post-tag tag-fire">🔥 バトル</span><p class="post-text">連載中の漫画をリアルタイムで追う体験って特別だと思う。結末を知らないまま読む緊張感、次号を待つあのもどかしさ。完結後に一気読みするのも最高だけど、この「待ち」の時間も漫画体験のひとつだよなあ。</p></div></div>
-  <div class="post"><div class="post-left"><div class="post-avatar">⚡</div><div class="post-line"></div></div><div class="post-body"><div class="post-meta"><span class="post-name">星芒の漫画サイト</span><span class="post-handle">@seibou_manga</span><span class="post-date">2024.05.20</span></div><span class="post-tag tag-thunder">⚡ スポーツ</span><p class="post-text">スポーツ漫画の名言って試合中より練習中の言葉のほうが刺さることが多い。漫画の外でも使える言葉が多い。それがスポーツ漫画の強さだと思う。</p></div></div>
-  <div class="post"><div class="post-left"><div class="post-avatar">💧</div><div class="post-line"></div></div><div class="post-body"><div class="post-meta"><span class="post-name">星芒の漫画サイト</span><span class="post-handle">@seibou_manga</span><span class="post-date">2024.05.13</span></div><span class="post-tag tag-water">💧 SF</span><p class="post-text">SF漫画の「世界の仕組み」説明回が好きすぎる問題。1話まるごとルール説明でも全然読めてしまう。作者がどれだけその世界を信じているかが伝わる。</p></div></div>
+  <div class="post">
+    <span class="post-date">2026.07.05</span>
+    <p class="post-text">手塚治虫の漫画を制覇したいな。</p>
+  </div>
+
+  <div class="post">
+    <span class="post-date">2026.07.04</span>
+    <p class="post-text">MANGA甲子園観た。面白かった。最終作品はるらりーなの作品が一番好きだったし人柄も一番魅力があった。</p>
+  </div>
+
+  <div class="post">
+    <span class="post-date">2026.06.26</span>
+    <p class="post-text">フルーツバスケットは本当に好き。人生で一番辛いときに読んだから、フルーツバスケットのおかげで生きてこれた。</p>
+  </div>
+
+  <div class="post">
+    <span class="post-date">2024.07.08</span>
+    <p class="post-text">ハンターハンター読んでるんだけど、語感がすごく良い名前が多い。ウボォーギン！！！</p>
+  </div>
+
+  <div class="post">
+    <span class="post-date">2024.07.01</span>
+    <p class="post-text">ファンアートを描き始めてわかったこと：好きなキャラのことをもっと好きになる。輪郭を追うたびに「この角度こんな顔なのか」って発見がある。絵が下手でも描く価値があると思った。</p>
+  </div>
+
+  <div class="post">
+    <span class="post-date">2024.06.24</span>
+    <p class="post-text">名作漫画の「1話目」の完成度について考えた。あの限られたページ数で世界を構築して読者を引き込む。1話目って作者の全力投球なんだよな。好きな漫画の1話だけを読み比べる時間がいちばん楽しいかもしれない。</p>
+  </div>
+
+  <div class="post">
+    <span class="post-date">2024.06.17</span>
+    <p class="post-text">バトル漫画における能力系と武器系の違い、ずっと言語化できてなかったけど今日わかった気がする。能力系は「自分の可能性を広げる」戦い、武器系は「技術を極める」戦い。どっちも熱いけど感動のポイントが違う。</p>
+  </div>
+
+  <div class="post">
+    <span class="post-date">2024.06.10</span>
+    <p class="post-text">恋愛漫画って「言えない気持ち」を描くのが上手い作品ほど好きだと気づいた。セリフより表情、表情より間のコマ。その沈黙のページを何度も読み返してしまう。</p>
+  </div>
+
+  <div class="post">
+    <span class="post-date">2024.06.03</span>
+    <p class="post-text">日常系漫画の「何も起きない回」が好き。主人公が部屋でゴロゴロして終わる回とか、友達とくだらない話だけして終わる回とか。漫画でしか描けないあの贅沢な時間の使い方。</p>
+  </div>
+
+  <div class="post">
+    <span class="post-date">2024.05.27</span>
+    <p class="post-text">連載中の漫画をリアルタイムで追う体験って特別だと思う。結末を知らないまま読む緊張感、次号を待つあのもどかしさ。完結後に一気読みするのも最高だけど、この「待ち」の時間も漫画体験のひとつだよなあ。</p>
+  </div>
+
+  <div class="post">
+    <span class="post-date">2024.05.20</span>
+    <p class="post-text">スポーツ漫画の名言って試合中より練習中の言葉のほうが刺さることが多い。漫画の外でも使える言葉が多い。それがスポーツ漫画の強さだと思う。</p>
+  </div>
+
+  <div class="post">
+    <span class="post-date">2024.05.13</span>
+    <p class="post-text">SF漫画の「世界の仕組み」説明回が好きすぎる問題。1話まるごとルール説明でも全然読めてしまう。作者がどれだけその世界を信じているかが伝わる。</p>
+  </div>
+
   <div class="year-divider"><span>2023</span></div>
-  <div class="post"><div class="post-left"><div class="post-avatar">🌿</div><div class="post-line"></div></div><div class="post-body"><div class="post-meta"><span class="post-name">星芒の漫画サイト</span><span class="post-handle">@seibou_manga</span><span class="post-date">2023.12.31</span></div><span class="post-tag tag-grass">🌿 振り返り</span><p class="post-text">2023年に読んだ漫画の振り返り。今年いちばん「ありがとう」と思った漫画、いちばん泣いた漫画、いちばん何度も読み返した漫画。全部違う作品だった。来年も漫画と生きていく。よいお年を。</p></div></div>
-  <div class="post"><div class="post-left"><div class="post-avatar">🔥</div><div class="post-line"></div></div><div class="post-body"><div class="post-meta"><span class="post-name">星芒の漫画サイト</span><span class="post-handle">@seibou_manga</span><span class="post-date">2023.12.18</span></div><span class="post-tag tag-fire">🔥 バトル</span><p class="post-text">最終回を読んだあとの余韻が好きすぎて、何もできなくなることがある。完結した漫画の最終巻を閉じたときの、あの静けさ。</p></div></div>
+
+  <div class="post">
+    <span class="post-date">2023.12.31</span>
+    <p class="post-text">2023年に読んだ漫画の振り返り。今年いちばん「ありがとう」と思った漫画、いちばん泣いた漫画、いちばん何度も読み返した漫画。全部違う作品だった。来年も漫画と生きていく。よいお年を。</p>
+  </div>
+
+  <div class="post">
+    <span class="post-date">2023.12.18</span>
+    <p class="post-text">最終回を読んだあとの余韻が好きすぎて、何もできなくなることがある。完結した漫画の最終巻を閉じたときの、あの静けさ。</p>
+  </div>
 </div>
+
 <div class="fx-divider"></div>
 <footer>
   <div><div class="footer-logo">⭐ 星芒の漫画サイト</div><div style="font-size:0.65rem;color:var(--sub);margin-top:4px;letter-spacing:1px;">マンガ総合ファンサイト</div></div>
