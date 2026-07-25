@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MANGA甲子園レポ — 星芒の漫画サイト</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#FFFDE7;--bg2:#FFF8E1;--bg3:#FFF3CD;
+  --accent:#C8000F;--accent2:#E85000;
+  --black:#1A1008;--dark:#2E2010;--mid:#6B4F2A;--sub:#9A7A4A;
+  --border:#E8D080;--border2:#D4B84A;
+  --fire:#E85000;--water:#0077AA;--grass:#2D8A2D;--thunder:#C8920A;
+}
+body{background:var(--bg);color:var(--black);font-family:'Noto Sans JP',sans-serif;overflow-x:hidden;}
+#fx-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.15;}
+
+/* HEADER */
+header{position:relative;z-index:100;background:var(--bg2);border-bottom:4px solid var(--accent);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 32px;border-bottom:1px solid var(--border);}
+.logo{font-family:'Noto Sans JP',sans-serif;font-size:1.6rem;font-weight:900;letter-spacing:3px;line-height:1;color:var(--black);}
+.logo span.accent{color:var(--accent);}
+.header-tagline{font-size:0.62rem;letter-spacing:2px;color:var(--sub);margin-top:3px;}
+.header-issue{text-align:right;font-size:0.72rem;color:var(--sub);letter-spacing:1px;}
+.header-issue strong{display:block;font-size:1rem;color:var(--black);font-weight:900;letter-spacing:2px;}
+nav{display:flex;align-items:center;padding:0 32px;background:var(--bg2);}
+nav a{color:var(--dark);text-decoration:none;font-weight:700;font-size:0.82rem;letter-spacing:2px;padding:13px 22px;display:inline-block;border-right:1px solid var(--border);transition:background 0.15s,color 0.15s;position:relative;text-transform:uppercase;}
+nav a:first-child{border-left:1px solid var(--border);}
+nav a::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--accent);transform:scaleX(0);transition:transform 0.2s;}
+nav a:hover{background:var(--bg3);color:var(--accent);}
+nav a:hover::after{transform:scaleX(1);}
+nav a.active{color:var(--accent);}
+nav a.active::after{transform:scaleX(1);}
+
+.fx-divider{position:relative;z-index:10;height:4px;background:linear-gradient(90deg,var(--fire),var(--thunder),var(--grass),var(--water),var(--fire));background-size:300% 100%;animation:slideGrad 4s linear infinite;}
+@keyframes slideGrad{0%{background-position:0%}100%{background-position:300%}}
+
+/* PAGE TITLE */
+.page-title{position:relative;z-index:10;padding:32px 32px 0;max-width:760px;margin:0 auto;}
+.page-title h1{font-weight:900;font-size:2rem;letter-spacing:4px;color:var(--black);display:flex;align-items:center;gap:14px;}
+.page-title h1::before{content:'';display:inline-block;width:6px;height:1.8rem;background:var(--accent);}
+.page-title .intro{
+  font-size:0.8rem;
+  color:var(--sub);
+  margin-top:12px;
+  line-height:1.9;
+  padding-left:20px;
+  border-left:2px solid var(--border2);
+}
+
+/* MAIN */
+.report-wrap{
+  position:relative;z-index:10;
+  max-width:760px;
+  margin:28px auto 64px;
+  padding:0 32px;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+/* REPORT CARD */
+.report-card{
+  background:#fff;
+  border-left:4px solid var(--accent);
+  box-shadow:0 1px 6px rgba(0,0,0,0.06);
+}
+
+.report-card-header{
+  padding:16px 20px 14px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:baseline;
+  gap:14px;
+}
+
+.report-ep{
+  font-family:'Bangers',cursive;
+  font-size:2rem;
+  color:var(--accent);
+  opacity:0.35;
+  line-height:1;
+  min-width:48px;
+  flex-shrink:0;
+}
+
+.report-title{
+  font-weight:900;
+  font-size:1rem;
+  color:var(--black);
+  line-height:1.4;
+}
+
+.report-body{
+  padding:18px 20px 20px;
+  font-size:0.87rem;
+  color:var(--dark);
+  line-height:2;
+}
+
+/* 段落ごとに改行 */
+.report-body p + p{
+  margin-top:1em;
+}
+
+/* BACK LINK */
+.back-link{
+  position:relative;z-index:10;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin:0 32px 40px;
+  color:var(--accent);
+  text-decoration:none;
+  font-size:0.78rem;
+  font-weight:700;
+  letter-spacing:1px;
+}
+.back-link:hover{color:var(--accent2);}
+
+/* FOOTER */
+footer{position:relative;z-index:10;background:var(--bg3);border-top:3px solid var(--accent);padding:24px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.footer-logo{font-weight:900;font-size:1.3rem;letter-spacing:2px;color:var(--accent);}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap;}
+.footer-links a{font-size:0.72rem;color:var(--mid);text-decoration:none;letter-spacing:1px;text-transform:uppercase;}
+.footer-links a:hover{color:var(--accent);}
+.footer-copy{font-size:0.65rem;color:var(--sub);letter-spacing:1px;}
+
+@media(max-width:600px){
+  .header-top{padding:10px 16px;}
+  nav{padding:0 8px;}
+  nav a{padding:12px 12px;font-size:0.72rem;}
+  .report-wrap,.page-title{padding:0 16px;}
+  .page-title{padding:24px 16px 0;}
+  .back-link{margin:0 16px 32px;}
+  footer{padding:20px 16px;}
+}
+</style>
+</head>
+<body>
+<canvas id="fx-canvas"></canvas>
+
+<header>
+  <div class="header-top">
+    <div>
+      <div class="logo">⭐ 星芒の<span class="accent">漫画サイト</span></div>
+      <div class="header-tagline">マンガ総合ファンサイト — The Ultimate Manga Fan Site</div>
+    </div>
+    <div class="header-issue"><strong>WEEKLY UPDATE</strong>毎週更新中</div>
+  </div>
+  <nav>
+    <a href="index.html">HOME</a>
+    <a href="blog.html">BLOG</a>
+    <a href="ranking.html">RANKING</a>
+    <a href="gallery.html" class="active">GALLERY</a>
+    <a href="about.html">ABOUT</a>
+  </nav>
+</header>
+
+<div class="fx-divider"></div>
+
+<div class="page-title">
+  <h1>MANGA甲子園レポ</h1>
+  <p class="intro">
+    MANGA甲子園を観た個人的な感想を述べていこうと思います！<br>
+    このレポートを書くうえで、敬語じゃないと見下している雰囲気を感じてしまったので敬語で全文書いています。ご了承ください。
+  </p>
+</div>
+
+<div class="report-wrap">
+
+  <article class="report-card">
+    <div class="report-card-header">
+      <span class="report-ep">01</span>
+      <h2 class="report-title">第１話 感想</h2>
+    </div>
+    <div class="report-body">
+      <p>MCも豪華ですし、声優陣もとても華やかで驚きました。MCの高橋ひかるさんは透明感があり、とても綺麗な方だと感じました。</p>
+      <p>新人賞を受賞されている方が二人も参加されていて、レベルの高さを感じました。漫画家の方々は個性が豊かな印象があるため、共同生活は刺激が多そうだと感じました。</p>
+      <p>１週間で５ページというのは想像以上に大変だと思います。私は１か月かかるので、本当にすごいと思います。</p>
+      <p>三好真太郎（以下、三好くん）は自信家なところがありますが、読み切り掲載の実績があるため、この中では一歩進んでいるのかなと感じました。るらりーな（以下、るらちゃん）は可愛らしい雰囲気ですが、個性がしっかりしていて魅力的だと思いました。</p>
+      <p>山本拓未（以下、山本くん）と三好くんは新人賞を受賞されていることもあり、確かな実力を感じました。蒼乃ちよ（以下、ちよちゃん）と中川一希（以下、中川くん）は大学にも通われていて、学業との両立がすごいと感じました。カン・ユンジン（以下、カンくん）は日本語がとてもお上手で、メンバーの個性が幅広く、バラエティ豊かな構成だと感じました。</p>
+      <p>控えめな方が多い中で、三好くんとるらちゃんが共同生活にどう馴染むのか少し気になりました。編集者の方に見ていただく場面では三好くんが一番褒められていて、ストーリーの面白さを見ると自信の裏付けがあるのだと感じました。</p>
+      <p>山本くんは「手書きにこだわる」というキャッチフレーズがついていますが、仕上げはデジタルも取り入れているようで、効率やコスト面を考えて工夫されているのだと思いました。結果は山本くんが一位で、作品の個性が際立っていたため納得の結果でした。三好くんが少し悔しい思いをされる場面もありましたが、評価されるポイントがしっかりあるのだと感じました。</p>
+    </div>
+  </article>
+
+  <article class="report-card">
+    <div class="report-card-header">
+      <span class="report-ep">02</span>
+      <h2 class="report-title">第２話 感想</h2>
+    </div>
+    <div class="report-body">
+      <p>推しは今のところ、るらちゃんかなと思っています。</p>
+      <p>プライドが高めの三好くん、山本くん、ちよちゃんの三人が組むのは少し不安に感じました。三好くんと山本くんは個性が強く、ちよちゃんがクッション役になるのは大変そうだと感じました。</p>
+      <p>え……待って。るらちゃんの専門学校時代は太っていたのですか？とても垢抜けたのだと驚きました。るらちゃんは個性が強く、共同生活を見ていて少し不安になりました。ただ、中川くんとカンくんがうまくるらちゃんをサポートすれば、良い方向に進みそうだと感じました。</p>
+      <p>るらちゃんはキャラデザイン担当に不満があるようですが、筋肉を描きたいとおっしゃっていたので、キャラデザインは合っているのではないかと思いました。山本くんは少し突っ走っているように見えますが、ちよちゃんと三好くんの相性が良いゆえに、単独行動が増えてしまっているのかなと感じました。</p>
+      <p>人の意見は素直に聞くことが大切だと改めて思いました。二人が「面白くない」と言っていたら、その意見は割と正しい場合もあるのだと思います。山本くんがネガティブモードに入ってしまいましたが、明るいるらちゃんがいてくれて良かったです。</p>
+      <p>るらちゃんが編集者の方に褒められたことで、キャラデザインを担当することに前向きになっていて分かりやすい変化だと感じました。中川くん、カンくん、るらちゃんの三人は相性が良く、中川くんとカンくんがうまくサポートしているように見えました。</p>
+      <p>もしかすると、ちよちゃんと山本くんは相性があまり良くないのかもしれません。それとも、ちよちゃんは三好くんのことが好きだったりするのでしょうか。徹夜はあまりおすすめできません。時間をかけたほうが良くなるのは確かですが、無理はしないほうが良いと思います。</p>
+      <p>山本くん、ちよちゃん、三好くんのチームは少し未完成で、まとまりがない印象を受けました。カンくん、中川くん、るらちゃん側の作品は印象に残りました。るらちゃんには、大人な方がそばにいるとより良いのではないかと感じました。</p>
+    </div>
+  </article>
+
+  <article class="report-card">
+    <div class="report-card-header">
+      <span class="report-ep">03</span>
+      <h2 class="report-title">第３話 感想</h2>
+    </div>
+    <div class="report-body">
+      <p>くさかべ先生のお題は「笑える漫画を描け」でした。カンくんは日本語がとてもお上手だと感じました。</p>
+      <p>三好くんはお笑い芸人の養成所に通われていたのですね。雰囲気が芸人の方のように見える理由が分かりました。中川くんの「自分が面白いと思っても他人から見ると面白くない」という言葉は、まさにその通りだと感じました。</p>
+      <p>「韓国と日本の笑いに違いがある」というのは、とても共感できます。英語を勉強しているときにもよく感じますが、英語圏の方と話していて笑いが起きたときに「今のどこが面白かったのだろう」と思うことがあります。英語のシットコムの笑いは分かりやすいのですが、特に英語圏の方と会話するとその違いを強く感じます。</p>
+      <p>絵で笑わせようとする姿勢は大切だと思います。カンくんは考えすぎてしまうところがあるのかもしれませんが、しっかり考えていて偉いと感じました。</p>
+      <p>三好くんは毎回「面白い」と褒められていて、構図に既視感があるものの、安定した評価を受けているのだと感じました。絵はカンくんが一番お上手だと思います。</p>
+      <p>三好くんの作品は、昔私が描いた読み切りに少し似ている気がして、周囲からいじられるのも分かる気がします。ギャグでパンティーを使うのは、やや安直だと感じました。</p>
+      <p>カンさんの作品が一位なのは納得できました。漫画が面白いこともありますが、今回は番組構成的にカンくんが多く取り上げられていたため、一位になる流れが分かりました。るらちゃんの漫画があまり印象に残らないのは、構成の問題なのか、作品自体の問題なのか判断が難しいと感じました。</p>
+      <p>るらちゃんはやる気がないわけではなく、ランキングが低いとやる気が落ちてしまうのだろうと擁護しようと思ったのですが、やる気が出ない原因が恋愛だったのは驚きました。カンくんを見ていると、人からフィードバックを聞くことの大切さを改めて感じました。</p>
+    </div>
+  </article>
+
+  <article class="report-card">
+    <div class="report-card-header">
+      <span class="report-ep">04</span>
+      <h2 class="report-title">第４話 感想</h2>
+    </div>
+    <div class="report-body">
+      <p>肉丸先生からのお題は「魅力的なヒロイン」でした。三好くんがカンくんを指名したのは、カンくんが大人な方なので良い選択だと思いました。三好くんには メリットがあると思いますが、カンくんにとってはどうなのか少し気になりました。三好くんは自我が強いところがあるため、カンくんが押されてしまわないか心配になりました。</p>
+      <p>ちよちゃんとるらちゃんは、本当に相性が良いと感じました。三好くんのナンパの場面は、見ていて少し辛くなりました。カンくんにフォローしてほしい気持ちになりました。</p>
+      <p>中川くんと山本くんは安定していて、落ち着いたチームという印象を受けました。この二人は一番安定しているように思います。</p>
+      <p>るらちゃんと三好くんが接触する場面が多く、恋が芽生えているように見えました。個人的には、るらちゃんには中川くんのようなしっかりした方のほうが合っているように感じます。るらちゃんは技術的には、このメンバーの中ではまだ伸びしろがあるように思いました。ストーリーは少し王道寄りだと感じました。</p>
+      <p>るらちゃんが髪を切ったのは驚きましたが、可愛らしくて面白かったです。山本くんが理由を尋ねたのは、意外と優しい一面があるのだと感じました。放っておきそうなタイプだと思っていたので、少し意外でした。</p>
+      <p>三好くんはいろいろと迷っている様子で、自分のストーリーへのこだわりが強いのだと感じました。こだわりが強い方は良いところまで行っても、最終的に孤独になってしまうことがあると思います。周囲に理解されないと意固地になってしまうこともあるので、気持ちはとても分かります。漫画を描くということは、他人の個性を受け入れることでもあるのだと改めて感じました。</p>
+      <p>三好くんとカンくんのコンビが恋愛を描かなかった点は、挑戦的で面白いと感じました。他のコンビが恋愛を描いていたため、差別化ができていたと思います。しかし、肉丸先生が恋愛を求めていたのであれば、その方向に合わせる必要があったのだと思います。肉丸先生の作風を理解しきれなかったため、三好・カンコンビは一位を逃したのではないかと感じました。</p>
+      <p>るらちゃんとちよちゃんがお互いを見て頷いていたのが、とても可愛らしかったです。最初に評価されていた方が、後半で落ちてしまうことはよくあると思います。</p>
+    </div>
+  </article>
+
+  <article class="report-card">
+    <div class="report-card-header">
+      <span class="report-ep">05</span>
+      <h2 class="report-title">第５話 感想</h2>
+    </div>
+    <div class="report-body">
+      <p>福地翼先生からのお題は「全員共通の導入から独自の結末を描く」でした。とても難しいお題だと感じました。</p>
+      <p>私でしたら、「これでこの星の美味いものは食べ尽くした！」という導入にして、地球人がいろいろな惑星のご当地料理を求めて旅をしているものの、どうしても食べたい料理だけは食べられない、というストーリーにするかもしれません。面白いかどうかは分かりませんが、そういった発想になると思います。</p>
+      <p>中川くんの「平均レベルの人は努力しなきゃ」という言葉は、少し心配になりました。努力が中心になりすぎると、かえってうまくいかないこともあるのではないかと感じます。</p>
+      <p>るらちゃんの行動は、周囲が少しイライラしてしまいそうだと感じました。漫画を描いているときに騒がしくするのは、あまり良くないと思います。るらちゃんは刺激の強い方向へ向かっているように見えました。刺激を求めすぎると、声も大きくなり、集中できなくなり、漫画の「静の刺激」と合わなくて辛くなってしまうのではないかと感じました。</p>
+      <p>三好くんが失踪したのは、前のエピソードで一人だけ褒められなかったことが辛かったのではないかと思いました。山本くんがきちんとメンバーの話を聞いていて、とても偉いと感じました。勇気のある行動だと思います。</p>
+      <p>三好くんは愛されキャラなので、みんなが心配している様子が伝わってきました。山本くんの評価が、最初の頃より上がってきたように感じます。</p>
+      <p>三好くんはキャラ作りが上手だと思います。天才型というより、根性のあるタイプなのではないかと感じました。やはり、中川くんにカメラが向き始めました。番組の構成上、優勝候補の方は後半から注目され始める傾向があるのだと思います。</p>
+    </div>
+  </article>
+
+  <article class="report-card">
+    <div class="report-card-header">
+      <span class="report-ep">06</span>
+      <h2 class="report-title">第６話 感想</h2>
+    </div>
+    <div class="report-body">
+      <p>MANGA甲子園は本当に構成が熱く、制作側がストーリーについて熟知しているのだと感じました。全員に平等に出番があるところがとても良いと思いました。</p>
+      <p>このリアリティーショーでは、るらりーなさんが一番ストーリー性があり、番組内で多くの挫折を経験しているため、とても面白く感じました。応援したくなる存在だと思います。共同生活に慣れていない様子も魅力的で、視聴者が共感しやすいのはるらりーなさんだったのではないかと感じました。</p>
+      <p>ちよちゃんは優勝は少し厳しい印象を受けました。カンくんもとても好印象で、静かに前向きな姿勢が素敵だと思いました。</p>
+      <p>るらりーなさんは、自分の漫画に自信が持てるとやる気が出るタイプなのだと感じました。そこはとても共感できます。中川くんと山本くんは優しく、参加者全員が穏やかな雰囲気でとても良い番組だと思いました。</p>
+      <p>るらりーなさんが描き上げた漫画はとても良く、恥ずかしい経験を作品にしているところが魅力的でした。るらりーなさんが一位を取ったのは物語性があり、とても面白かったです。島本和彦先生は熱く、まさに灼熱のような勢いでした。</p>
+      <p>最後の雰囲気がとても良かったのは、参加者の皆さんの性格が良いからだと思います。私が参加していたら、きっとギスギスしてしまうだろうなと感じました。</p>
+    </div>
+  </article>
+
+  <article class="report-card">
+    <div class="report-card-header">
+      <span class="report-ep">07</span>
+      <h2 class="report-title">第７話 感想（最終回）</h2>
+    </div>
+    <div class="report-body">
+      <p>まあ、逆転システムはありますよね。編集者の方が一人100点満点で採点されるようです。ちよちゃんは少し化粧をされていて、以前よりあか抜けた印象を受けました。</p>
+      <p>三好くんは最後の最後に愚痴を言ってしまったようで、少し良くないなと感じました。入院と棄権という状況は、とても大変だったのだと思います。計画を立てて共同生活をこなし、編集者の方へ毎回提出し、漫画を描き上げた中川くんと山本くんは、それだけで尊敬できると感じました。</p>
+      <p>三好くんがいない番組は、少し寂しく感じました。ちよちゃんは泣きそうで、悔しい気持ちが伝わってきました。点数を見ると、勝ち上がるのは難しい状況だったのだと思います。カンくんは最後まで描き上げていて、とても立派だと感じました。</p>
+      <p>三好くんは川崎出身なのですね。漫画とお笑いの二つを続けるのは大変ですが、漫画の中にお笑いを入れたり、お笑いの中に漫画を入れたりできるので、両立は可能だと思います。</p>
+      <p>るらちゃんは緊張しているため、余計に話しすぎてしまうのだと感じました。ちよちゃんはとても悔しそうで、胸が痛くなりました。頑張ってほしいです。</p>
+      <p>島本先生は意外と厳しく、言葉に重みがありました。「読者がガーっとなってストンと落ちるようなストーリーが良い」という言葉がとても印象に残りました。</p>
+      <p>るらちゃんの漫画はとても面白く、今回の中では一番魅力的だと感じました。ユニークで、絵も上手く、本当に同じ方が描いたのかと驚くほどでした。ただ、249ポイント差があるため、優勝は難しそうだと思いました。</p>
+      <p>山本くんは中川くんと同じく、地道に努力されてきた印象があります。コツコツ積み重ねてきた結果が出ているのだと思います。個人的な順位としては、るらちゃん → 山本くん → ちよちゃん → 中川くん、という印象です。</p>
+      <p>優勝者は中川くんでした。チームワークと人間関係の上手さが勝因だったように感じます。しかし残酷なことに、ネットで検索すると現在活動されているのは三好くんだけでした。結局、そういうものなのだと感じます。</p>
+      <p>この番組では中川くんが勝てたかもしれませんが、最終的にはチームワークではなく、一人でコツコツ続けられる人が漫画を続けていくのだと思います。</p>
+    </div>
+  </article>
+
+</div>
+
+<a class="back-link" href="gallery.html">← ギャラリーに戻る</a>
+
+<div class="fx-divider"></div>
+
+<footer>
+  <div>
+    <div class="footer-logo">⭐ 星芒の漫画サイト</div>
+    <div style="font-size:0.65rem;color:var(--sub);margin-top:4px;letter-spacing:1px;">マンガ総合ファンサイト</div>
+  </div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="blog.html">Blog</a>
+    <a href="ranking.html">Ranking</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="about.html">About</a>
+  </div>
+  <div class="footer-copy">© 2024 星芒の漫画サイト — 掲載作品の著作権は各作者・出版社に帰属します</div>
+</footer>
+
+<script>
+(function(){
+  const canvas=document.getElementById('fx-canvas');
+  const ctx=canvas.getContext('2d');
+  let W,H,particles=[];
+  const TYPES=[
+    {name:'fire',color:'rgba(232,80,0,'},
+    {name:'water',color:'rgba(0,119,170,'},
+    {name:'grass',color:'rgba(45,138,45,'},
+    {name:'thunder',color:'rgba(200,146,10,'}
+  ];
+  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+  function makeParticle(){
+    const t=TYPES[Math.floor(Math.random()*TYPES.length)];
+    const size=4+Math.random()*10;
+    return{x:Math.random()*W,y:H+size,vx:(Math.random()-0.5)*0.5,vy:-(0.2+Math.random()*0.6),size,alpha:0.1+Math.random()*0.3,type:t,rot:Math.random()*Math.PI*2,rotv:(Math.random()-0.5)*0.03,life:0,maxLife:200+Math.random()*400};
+  }
+  function init(){
+    resize();
+    for(let i=0;i<50;i++){const p=makeParticle();p.y=Math.random()*H;p.life=Math.random()*p.maxLife;particles.push(p);}
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    particles.forEach(p=>{
+      const fade=Math.min(p.life/30,1)*Math.min((p.maxLife-p.life)/30,1);
+      ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=p.alpha*fade;
+      if(p.type.name==='fire'){ctx.fillStyle=p.type.color+'1)';ctx.fillRect(-p.size/4,-p.size/2,p.size/2,p.size);}
+      else if(p.type.name==='thunder'){ctx.strokeStyle=p.type.color+'1)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(p.size/2,-p.size/2);ctx.lineTo(-p.size/4,0);ctx.lineTo(p.size/4,0);ctx.lineTo(-p.size/2,p.size/2);ctx.stroke();}
+      else if(p.type.name==='water'){ctx.fillStyle=p.type.color+'1)';ctx.beginPath();ctx.arc(0,0,p.size/2,0,Math.PI*2);ctx.fill();}
+      else{ctx.strokeStyle=p.type.color+'1)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(-p.size/2,0);ctx.lineTo(p.size/2,0);ctx.moveTo(0,-p.size/2);ctx.lineTo(0,p.size/2);ctx.stroke();}
+      ctx.restore();
+      p.x+=p.vx;p.y+=p.vy;p.rot+=p.rotv;p.life++;
+      if(p.life>p.maxLife)Object.assign(p,makeParticle());
+    });
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',resize);
+  init();draw();
+})();
+</script>
+</body>
+</html>
