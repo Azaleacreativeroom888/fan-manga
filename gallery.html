@@ -98,6 +98,41 @@ nav a.active::after{transform:scaleX(1);}
 
 .gallery-item.hidden{display:none;}
 
+/* REPORT LIST */
+.report-list{display:flex;flex-direction:column;gap:10px;}
+
+.report-card{
+  display:block;
+  text-decoration:none;
+  background:#fff;
+  border:1px solid var(--border);
+  border-left:4px solid var(--accent);
+  transition:background 0.15s,transform 0.15s;
+  box-shadow:0 1px 4px rgba(0,0,0,0.05);
+}
+.report-card:hover{background:var(--bg3);transform:translateX(4px);}
+
+.report-card-inner{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:16px 18px;
+}
+.report-num{
+  font-family:'Bangers',cursive;
+  font-size:2rem;
+  color:var(--accent);
+  opacity:0.35;
+  line-height:1;
+  min-width:40px;
+  flex-shrink:0;
+}
+.report-info{flex:1;}
+.report-title{font-weight:900;font-size:0.95rem;color:var(--black);margin-bottom:4px;}
+.report-desc{font-size:0.75rem;color:var(--sub);line-height:1.6;}
+.report-arrow{font-size:1.4rem;color:var(--border2);flex-shrink:0;transition:color 0.15s,transform 0.15s;}
+.report-card:hover .report-arrow{color:var(--accent);transform:translateX(3px);}
+
 footer{position:relative;z-index:10;background:var(--bg3);border-top:3px solid var(--accent);padding:24px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
 .footer-logo{font-weight:900;font-size:1.3rem;letter-spacing:2px;color:var(--accent);}
 .footer-links{display:flex;gap:20px;flex-wrap:wrap;}
@@ -134,6 +169,7 @@ footer{position:relative;z-index:10;background:var(--bg3);border-top:3px solid v
   <button class="filter-btn active" data-filter="all">ALL</button>
   <button class="filter-btn" data-filter="illust">イラスト</button>
   <button class="filter-btn" data-filter="manga">漫画</button>
+  <button class="filter-btn" data-filter="report">レポート</button>
 </div>
 <div class="gallery-wrap">
   <div class="section-label" data-section="illust">🎨 イラスト</div>
@@ -151,6 +187,22 @@ footer{position:relative;z-index:10;background:var(--bg3);border-top:3px solid v
     <div class="manga-thumb type-grass gallery-item" data-cat="manga" data-title="となりのページ" data-caption="日常系短編漫画。図書室で毎日会う二人のお話。全6ページ。" data-src=""><div class="manga-badge">6 PAGES</div><div class="thumb-placeholder">No Image</div><div class="thumb-overlay"><span class="t-type">🌿 日常</span><span class="t-title">となりのページ</span><span class="t-view">TAP TO VIEW</span></div></div>
     <div class="manga-thumb type-thunder gallery-item" data-cat="manga" data-title="最後の一本" data-caption="スポーツ系短編漫画。試合最終盤、全力を出し切る選手の話。全3ページ。" data-src=""><div class="manga-badge">3 PAGES</div><div class="thumb-placeholder">No Image</div><div class="thumb-overlay"><span class="t-type">⚡ スポーツ</span><span class="t-title">最後の一本</span><span class="t-view">TAP TO VIEW</span></div></div>
     <div class="manga-thumb type-water gallery-item" data-cat="manga" data-title="さよならの前に" data-caption="切ない恋愛短編漫画。別れの日に気持ちを伝えようとする話。全5ページ。" data-src=""><div class="manga-badge">5 PAGES</div><div class="thumb-placeholder">No Image</div><div class="thumb-overlay"><span class="t-type">💧 恋愛</span><span class="t-title">さよならの前に</span><span class="t-view">TAP TO VIEW</span></div></div>
+  </div>
+
+  <div class="section-label" data-section="report">✏ レポート</div>
+  <div class="report-list" id="report-list">
+
+    <a href="report1.html" class="report-card">
+      <div class="report-card-inner">
+        <div class="report-num">01</div>
+        <div class="report-info">
+          <div class="report-title">MANGA甲子園 全話感想</div>
+          <div class="report-desc">全7話を通じた個人的な感想レポート。各話のキャラクター分析・展開考察など。</div>
+        </div>
+        <div class="report-arrow">›</div>
+      </div>
+    </a>
+
   </div>
 </div>
 
@@ -175,7 +227,8 @@ const items=document.querySelectorAll('.gallery-item');
 const sections=document.querySelectorAll('[data-section]');
 const illustGrid=document.getElementById('illust-grid');
 const mangaGrid=document.getElementById('manga-grid');
-filterBtns.forEach(btn=>{btn.addEventListener('click',()=>{filterBtns.forEach(b=>b.classList.remove('active'));btn.classList.add('active');const f=btn.dataset.filter;items.forEach(item=>{if(f==='all'||item.dataset.cat===f){item.classList.remove('hidden');}else{item.classList.add('hidden');}});sections.forEach(s=>{if(f==='all'){s.style.display='';}else if(s.dataset.section===f){s.style.display='';}else{s.style.display='none';}});illustGrid.style.display=(f==='manga')?'none':'';mangaGrid.style.display=(f==='illust')?'none':'';});});
+const reportList=document.getElementById('report-list');
+filterBtns.forEach(btn=>{btn.addEventListener('click',()=>{filterBtns.forEach(b=>b.classList.remove('active'));btn.classList.add('active');const f=btn.dataset.filter;items.forEach(item=>{if(f==='all'||item.dataset.cat===f){item.classList.remove('hidden');}else{item.classList.add('hidden');}});sections.forEach(s=>{if(f==='all'){s.style.display='';}else if(s.dataset.section===f){s.style.display='';}else{s.style.display='none';}});illustGrid.style.display=(f==='manga'||f==='report')?'none':'';mangaGrid.style.display=(f==='illust'||f==='report')?'none':'';reportList.style.display=(f==='illust'||f==='manga')?'none':'';});});
 const lb=document.getElementById('lightbox');const lbImg=document.getElementById('lb-img');const lbPh=document.getElementById('lb-placeholder');const lbPhName=document.getElementById('lb-ph-name');const lbTitle=document.getElementById('lb-title');const lbCaption=document.getElementById('lb-caption');const lbClose=document.getElementById('lb-close');const lbPrev=document.getElementById('lb-prev');const lbNext=document.getElementById('lb-next');let visibleItems=[],currentIdx=0;
 function getVisible(){return Array.from(items).filter(i=>!i.classList.contains('hidden'));}
 function openLb(idx){visibleItems=getVisible();currentIdx=idx;showLbItem();lb.classList.add('open');document.body.style.overflow='hidden';}
